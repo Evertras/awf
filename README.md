@@ -36,27 +36,27 @@ See [Gameplay doc](docs/Gameplay.md) for more details.
 
 ### 0.1.0 - Boilerplate
 
-[x] Server serves static content
-[x] WASM built that simply says "Hello World" to console when run
-[x] Index.html is mostly placeholder that loads WASM
-[x] Typescript compiled from main.ts entrypoint
-[x] Travis CI working and passing
-[x] A dummy test is passing in Typescript and Go lands
+* [x] Server serves static content
+* [x] WASM built that simply says "Hello World" to console when run
+* [x] Index.html is mostly placeholder that loads WASM
+* [x] Typescript compiled from main.ts entrypoint
+* [x] Travis CI working and passing
+* [x] A dummy test is passing in Typescript and Go lands
 
 To verify, should see "Hello World" in console when loading page via server.
 
 ### 0.2.0 - Data definitions
 
-[x] Units defined in code
-[x] Terrain defined in code
-[x] Can load unit/terrain types via abstracted config layer
-[ ] Map data defined in code
-[ ] Sample prototype map loader functional
+* [x] Units defined in code
+* [x] Terrain defined in code
+* [x] Can load unit/terrain types via abstracted config layer
+* [ ] Map data defined in code
+* [ ] Sample prototype map loader functional
 
 ### 0.3.0 - Foundational logic
 
-[ ] Functionality to determine potential movement for a unit on a map
-[ ] TBD
+* [ ] Functionality to determine potential movement for a unit on a map
+* [ ] TBD
 
 ### ???
 
