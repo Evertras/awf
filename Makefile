@@ -28,7 +28,7 @@ bench:
 run-dev: front/game.js lib/static/build.go
 	go run -race ./cmd/server/main.go -d -t 3
 
-docker: clean generate
+docker: clean build
 	docker build --rm -t evertras/$(BINARY_NAME) .
 
 protos: messages/gomessage messages/tsmessage
