@@ -1,7 +1,7 @@
 BINARY_NAME=awf
 TS_FILES=$(shell find front/src -name "*.ts")
 
-all: build
+all: test build
 
 clean:
 	rm -f $(BINARY_NAME)
