@@ -49,7 +49,7 @@ To verify, should see "Hello World" in console when loading page via server.
 
 * [x] Units defined in code
 * [x] Terrain defined in code
-* [x] Can load unit/terrain types via abstracted config layer
+* [x] Can load unit/terrain types via YAML
 * [ ] Map data defined in code
 * [ ] Sample prototype map loader functional
 
