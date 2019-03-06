@@ -36,6 +36,9 @@ See [Gameplay doc](docs/Gameplay.md) for more details.
 * Server serves static content
 * WASM built that simply says "Hello World" to console when run
 * Index.html is mostly placeholder that loads WASM
+* Typescript compiled from main.ts entrypoint
+* Travis CI working and passing
+* A dummy test is passing in Typescript and Go lands
 
 To verify, should see "Hello World" in console when loading page via server.
 
