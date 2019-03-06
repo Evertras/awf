@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package awfmsg;
+package awfdata;
 
 import "terrain.proto";
 import "faction.proto";

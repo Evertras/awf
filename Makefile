@@ -1,5 +1,6 @@
 BINARY_NAME=awf
 TS_FILES=$(shell find front/src -name "*.ts")
+GO_PROTO_BUILD_DIR=lib/awfdata
 
 all: test build
 
@@ -9,7 +10,7 @@ clean:
 	rm -f front/game.js
 	rm -f front/game.js.map
 	rm -f front/lib.wasm
-	rm -rf messages/gomessage
+	rm -rf $(GO_PROTO_BUILD_DIR)
 	rm -rf messages/tsmessage
 
 test: node_modules protos lib/static/build.go
@@ -32,7 +33,7 @@ run-dev: front/game.js lib/static/build.go
 docker: clean build
 	docker build --rm -t evertras/$(BINARY_NAME) .
 
-protos: messages/gomessage messages/tsmessage
+protos: $(GO_PROTO_BUILD_DIR) messages/tsmessage
 
 # These are not files, so always run them when asked to
 .PHONY: all clean test build bench run-dev proto
@@ -47,12 +48,11 @@ lib/static/build.go: front/lib.wasm front/game.js
 node_modules:
 	npm install
 
-messages/gomessage: messages/*.proto
-	rm -rf messages/gomessage
-	mkdir messages/gomessage
+$(GO_PROTO_BUILD_DIR): messages/*.proto
+	mkdir $(GO_PROTO_BUILD_DIR)
 	@# Slightly weird PWD syntax here to deal with Windows gitbash mangling it otherwise.
 	@# This is intentional, don't remove the initial slash!
-	docker run -v /${PWD}/messages:/defs namely/protoc-all -f *.proto -l go -o gomessage || (rm -rf messages/gomessage && exit 1)
+	docker run -v /${PWD}:/defs namely/protoc-all -d messages -l go -o $(GO_PROTO_BUILD_DIR) || (rm -rf $(GO_PROTO_BUILD_DIR) && exit 1)
 
 messages/tsmessage: node_modules messages/*.proto
 	rm -rf messages/tsmessage

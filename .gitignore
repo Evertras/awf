@@ -17,6 +17,7 @@ front/lib.wasm
 
 # Protobuf compilation
 messages/*message/
+lib/awfdata
 
 # Output of generate
 lib/static/build.go
