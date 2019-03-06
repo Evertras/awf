@@ -31,7 +31,7 @@ See [Gameplay doc](docs/Gameplay.md) for more details.
 
 ## Milestones
 
-### 0.0.1 - Boilerplate
+### 0.1.0 - Boilerplate
 
 * Server serves static content
 * WASM built that simply says "Hello World" to console when run
@@ -39,22 +39,22 @@ See [Gameplay doc](docs/Gameplay.md) for more details.
 
 To verify, should see "Hello World" in console when loading page via server.
 
-### 0.0.2 - Data definitions
+### 0.2.0 - Data definitions
 
 * Units defined in code
 * Terrain defined in code
 * Can load unit/terrain types via abstracted config layer
 
-### 0.0.3 - Foundational logic
+### 0.3.0 - Foundational logic
 
 * Functionality to determine potential movement for a unit on a map
 * TBD
 
 ### ???
 
-???
+??? - Probably need some other stuff TBD
 
-### 0.1.0 - Front End Basic
+### 0.X.0 - Front End Basic
 
 * A level is loaded and visible with distinguishable terrain
 * A few units are loaded and visible on some tile

@@ -10,3 +10,14 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Output of generate
+lib/static/build.go
+
+# Javascript stuff
+node_modules/
+front/build
+
+# Build artifact for Javascript
+front/game.js
+front/game.js.map
