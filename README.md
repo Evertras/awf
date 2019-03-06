@@ -6,6 +6,8 @@ in order to promote interesting tactical decisions without a long slog near the 
 
 ## Gameplay Goals
 
+See [Gameplay doc](docs/Gameplay.md) for more details.
+
 * Selectable factions with asymmetric strengths in unit types
 * Play on a predefined level against either a dead simple AI or another player (network)
 * Fog of war necessitates scouting and encourages sneakiness
@@ -14,6 +16,7 @@ in order to promote interesting tactical decisions without a long slog near the 
 * Capture an objective by moving onto it with certain kinds of units
 * Gain points for each controlled objective every turn
 * Playable on web via HTML5
+* A full game should be completed in about 10-20 minutes (narrow later based on what's actually fun)
 
 ## Technical Goals
 
