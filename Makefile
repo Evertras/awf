@@ -1,6 +1,7 @@
 BINARY_NAME=awf
+TS_FILES=$(shell find front/src -name "*.ts")
 
-all: test build
+all: build
 
 clean:
 	rm -f $(BINARY_NAME)
@@ -37,7 +38,7 @@ protos: messages/gomessage messages/tsmessage
 .PHONY: all clean test build bench run-dev proto
 
 # Actual files/directories that must be generated
-front/game.js: node_modules messages/tsmessage
+front/game.js: node_modules messages/tsmessage $(TS_FILES)
 	npx webpack || (rm -f front/game.js && exit 1)
 
 lib/static/build.go: front/lib.wasm front/game.js
@@ -46,14 +47,14 @@ lib/static/build.go: front/lib.wasm front/game.js
 node_modules:
 	npm install
 
-messages/gomessage:
+messages/gomessage: messages/*.proto
 	rm -rf messages/gomessage
 	mkdir messages/gomessage
 	@# Slightly weird PWD syntax here to deal with Windows gitbash mangling it otherwise.
 	@# This is intentional, don't remove the initial slash!
 	docker run -v /${PWD}/messages:/defs namely/protoc-all -f *.proto -l go -o gomessage || (rm -rf messages/gomessage && exit 1)
 
-messages/tsmessage: node_modules
+messages/tsmessage: node_modules messages/*.proto
 	rm -rf messages/tsmessage
 	mkdir messages/tsmessage
 	npx pbjs -t static-module -w commonjs messages/*.proto > messages/tsmessage/messages.js || (rm -rf messages/tsmessage && exit 1)
