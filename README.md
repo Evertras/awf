@@ -51,7 +51,7 @@ To verify, should see "Hello World" in console when loading page via server.
 * [x] Terrain defined in code
 * [x] Can load unit/terrain types via YAML
 * [ ] Map data defined in code
-* [ ] Sample prototype map loader functional
+* [ ] Sample prototype map can be loaded on demand
 
 ### 0.3.0 - Foundational logic
 
