@@ -22,8 +22,41 @@ See [Gameplay doc](docs/Gameplay.md) for more details.
 
 * Write the core gameplay in Go, focused on the server
 * Create a facade interface for a front end to reach in via WASM to know where things are
+* Have the option to reasonably write a native front end (Ebiten?) in a similar fashion as web without much fuss
 * No duplicate logic in back end and front end
 
 ## Initial Non-Goals
 
 * No persistance or logins, everything is ephemeral in memory directly on the server
+
+## Milestones
+
+### 0.0.1 - Boilerplate
+
+* Server serves static content
+* WASM built that simply says "Hello World" to console when run
+* Index.html is mostly placeholder that loads WASM
+
+To verify, should see "Hello World" in console when loading page via server.
+
+### 0.0.2 - Data definitions
+
+* Units defined in code
+* Terrain defined in code
+* Can load unit/terrain types via abstracted config layer
+
+### 0.0.3 - Foundational logic
+
+* Functionality to determine potential movement for a unit on a map
+* TBD
+
+### ???
+
+???
+
+### 0.1.0 - Front End Basic
+
+* A level is loaded and visible with distinguishable terrain
+* A few units are loaded and visible on some tile
+* The player can click the unit and see potential destinations, then click again to move the unit there
+* This process can be repeated infinite times, with one unit moving at a time unlimited times
