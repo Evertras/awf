@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package awfmsg;
+
+import "terrain.proto";
+
+message Map {
+    uint32 width = 1;
+    uint32 height = 2;
+
+    // To access <X,Y>, access [Y*width + X]
+    repeated Terrain tiles = 3;
+}

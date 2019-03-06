@@ -26,6 +26,7 @@ See [Gameplay doc](docs/Gameplay.md) for more details.
 * Create a facade interface for a front end to reach in via WASM to know where things are
 * Have the option to reasonably write a native front end (Ebiten?) in a similar fashion as web without much fuss
 * No duplicate logic in back end and front end
+* Use protobufs as data schemas for all code; not sure if this is a good idea, but want to try it to find out
 
 ## Initial Non-Goals
 
@@ -49,6 +50,8 @@ To verify, should see "Hello World" in console when loading page via server.
 * Units defined in code
 * Terrain defined in code
 * Can load unit/terrain types via abstracted config layer
+* Map data defined in code
+* Sample prototype map loader functional
 
 ### 0.3.0 - Foundational logic
 

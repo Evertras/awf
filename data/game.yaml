@@ -1,0 +1,37 @@
+########################################################
+# TERRAIN TYPES
+terrain:
+
+  - name: Open
+
+  - name: Forest
+    concealing: true
+    defense_modifier: 1
+
+  - name: Water
+    water: true
+
+  - name: Objective
+    objective: true
+    defense_modifier: 1
+
+########################################################
+# FACTIONS
+factions:
+
+  - name: Prototype
+    units:
+
+      - name: Infantry
+        movement: 2
+        strength: 5
+        vision: 2
+        capturing: true
+
+      - name: Cavalry
+        movement: 4
+        strength: 3
+        vision: 2
+        attack_modifier: 4
+        terrain_costs:
+          Forest: 3

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package awfmsg;
+
+message Terrain {
+    string name = 1;
+
+    // Attributes
+    bool water = 2;
+    bool objective = 3;
+    bool concealing = 4;
+    int32 defense_modifier = 5;
+}

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package awfmsg;
+
+import "unit_template.proto";
+
+message Faction {
+    string name = 1;
+    repeated UnitTemplate units = 2;
+}

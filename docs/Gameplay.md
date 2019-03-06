@@ -42,37 +42,13 @@ Tentative list of initial types are as follows:
 A Unit is defined by the following data:
 
 * Name
-* Type
 * Movement Total
 * Movement Cost Per Terrain Type (if different from provided default)
 * Tags
 * Base Combat Strength
 * Vision Range
 
-### Unit Types
-
-A Unit Type is defined by a name and its relationships versus other unit types.
-
-The initial Unit Type list is as follows:
-
-* Scout
-* Infantry
-* Cavalry
-* Monster
-* Support
-
-Scouts are generally fast, ignore terrain penalties, and have good vision.  They are good against Infantry but poor against
-everything else.
-
-Infantry is the only unit type that can capture objectives.  They are poor against Cavalry but good against Monsters.
-
-Cavalry is faster moving and hard hitting, but more affected by terrain.  They are good against Infantry but poor against Monsters.
-
-Monsters are slow, but very powerful.  Good against Cavalry but poor against Infantry.
-
-Support units may or may not be able to fight, but offer other benefits such as a healing aura.
-
-### Unit Tags
+### Unit Attributes
 
 A tag is defined by the following data:
 
@@ -83,6 +59,7 @@ The following tags may be present in any combination:
 
 | Tag Name        | Description |
 |-----------------|-------------|
+| Capturing       | This unit can capture objectives. |
 | Pacifist        | Doesn't attack.  Can still be attacked as normal. |
 | Flying          | Ignores all terrain movement costs. |
 | Piercing Vision | Can see through all terrain. |
@@ -97,3 +74,12 @@ Units that are damaged deal significantly less damage, giving an innate advantag
 if the attacked unit isn't destroyed.
 
 Formulae TBD
+
+## Faction
+
+A Faction is defined simply as:
+
+* Name
+* List of units to spawn
+
+This may expand later.

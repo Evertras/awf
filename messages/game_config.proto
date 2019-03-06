@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package awfmsg;
+
+import "terrain.proto";
+import "faction.proto";
+
+message GameConfig {
+    repeated Terrain terrain = 1;
+    repeated Faction factions = 2;
+}

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package awfmsg;
+
+message UnitTemplate {
+    message Ranged {
+        uint32 minimum = 1;
+        uint32 maximum = 2;
+    }
+
+    string name = 1;
+    int32 movement = 2;
+    int32 strength = 3;
+    int32 vision = 4;
+
+    // For any terrain that costs something other than 1 for this unit
+    map<string, uint32> terrain_costs = 10;
+
+    // Attributes
+    bool capturing = 5;
+    bool pacifist = 6;
+    bool flying = 7;
+    int32 attack_modifier = 8;
+    Ranged ranged = 9;
+
+    // Abilities
+}
