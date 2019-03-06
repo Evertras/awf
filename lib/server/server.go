@@ -46,6 +46,14 @@ func (s *Server) Listen(addr string) error {
 			w.Header().Set("Content-Type", "script/javascript")
 			io.WriteString(w, static.StaticJsWasmExec)
 		})
+		mux.HandleFunc("/game.js", func(w http.ResponseWriter, req *http.Request) {
+			w.Header().Set("Content-Type", "script/javascript")
+			io.WriteString(w, static.StaticJsGame)
+		})
+		mux.HandleFunc("/favicon.ico", func(w http.ResponseWriter, req *http.Request) {
+			w.Header().Set("Content-Type", "image/x-icon")
+			w.Write(static.StaticFavicon)
+		})
 		mux.HandleFunc("/style.css", func(w http.ResponseWriter, req *http.Request) {
 			w.Header().Set("Content-Type", "text/css")
 			io.WriteString(w, static.StaticCssStyle)
