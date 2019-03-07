@@ -49,6 +49,7 @@ node_modules:
 	npm install
 
 $(GO_PROTO_BUILD_DIR): messages/*.proto
+	rm -rf $(GO_PROTO_BUILD_DIR)
 	mkdir $(GO_PROTO_BUILD_DIR)
 	@# Slightly weird PWD syntax here to deal with Windows gitbash mangling it otherwise.
 	@# This is intentional, don't remove the initial slash!
