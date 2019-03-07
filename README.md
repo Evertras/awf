@@ -52,7 +52,7 @@ To verify, should see "Hello World" in console when loading page via server.
 * [x] Can load unit/terrain types via YAML
 * [x] Map data defined in code
 * [x] Sample prototype map can be loaded on demand
-* [ ] Game in progress defined in code with units belonging to different players on map
+* [x] Game in progress defined in code with units belonging to different players on map
 
 ### 0.3.0 - Foundational logic
 
@@ -66,7 +66,7 @@ To verify, should see "Hello World" in console when loading page via server.
 
 ### 0.X.0 - Front End Basic
 
-* A level is loaded and visible with distinguishable terrain
-* A few units are loaded and visible on some tile
-* The player can click the unit and see potential destinations, then click again to move the unit there
-* This process can be repeated infinite times, with one unit moving at a time unlimited times
+* [ ] A level is loaded and visible with distinguishable terrain
+* [ ] A few units are loaded and visible on some tile
+* [ ] The player can click the unit and see potential destinations, then click again to move the unit there
+* [ ] This process can be repeated infinite times, with one unit moving at a time unlimited times
