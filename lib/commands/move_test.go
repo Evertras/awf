@@ -69,7 +69,7 @@ func TestMoveWorksSimple(t *testing.T) {
 	}
 }
 
-func TestMoveErrorsGracefullyOnInvalidInput(t *testing.T) {
+func TestMoveErrorsGracefullyOnOutOfBoundsMoves(t *testing.T) {
 	playerID := 3
 	srcX := 0
 	srcY := 0
