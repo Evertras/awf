@@ -152,3 +152,57 @@ func TestMoveErrorsGracefullyOnOutOfBoundsMoves(t *testing.T) {
 		}
 	}
 }
+
+func TestMoveErrorsFromWrongPlayer(t *testing.T) {
+	playerID := 3
+	srcX := 0
+	srcY := 0
+	destX := 1
+	destY := 2
+	g, err := loaders.PrototypeGame()
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	unit := &awfdata.Unit{
+		Name:     "SampleMover",
+		Owner:    uint32(playerID),
+		Movement: 3,
+	}
+
+	sourceTile := awfdatautil.MapTileAt(g.Map, srcX, srcY)
+
+	sourceTile.Unit = unit
+
+	destinationTile := awfdatautil.MapTileAt(g.Map, destX, destY)
+
+	// Just to be safe, clear it out
+	destinationTile.Unit = nil
+
+	cmd := &awfdata.CmdMove{
+		Origin: &awfdata.Point{
+			X: uint32(srcX),
+			Y: uint32(srcY),
+		},
+		Destination: &awfdata.Point{
+			X: uint32(destX),
+			Y: uint32(destY),
+		},
+	}
+
+	// Use the wrong player ID
+	err = Move(cmd, playerID+1, g)
+
+	if err == nil {
+		t.Error("Expected to have an error, but didn't")
+	}
+
+	if sourceTile.Unit == nil {
+		t.Error("Expected source tile to have unit, but found none")
+	}
+
+	if destinationTile.Unit != nil {
+		t.Errorf("Expected destination tile to not have unit, but found one named %q", destinationTile.Unit.Name)
+	}
+}
