@@ -30,7 +30,10 @@ func TestMapTileAt(t *testing.T) {
 	for x := 0; x < width; x++ {
 		for y := 0; y < height; y++ {
 			expectedName := fmt.Sprintf("Test%d%d", x, y)
-			tile := MapTileAt(m, x, y)
+			tile := MapTileAt(m, &awfdata.Point{
+				X: uint32(x),
+				Y: uint32(y),
+			})
 
 			if tile.Terrain.Name != expectedName {
 				t.Errorf("Expected name %q but got %q", expectedName, tile.Terrain.Name)

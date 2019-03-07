@@ -11,10 +11,8 @@ import (
 
 func TestMoveWorksSimple(t *testing.T) {
 	playerID := 3
-	srcX := 0
-	srcY := 0
-	destX := 1
-	destY := 2
+	src := &awfdata.Point{X: 0, Y: 0}
+	dest := &awfdata.Point{X: 1, Y: 2}
 	g, err := loaders.PrototypeGame()
 
 	if err != nil {
@@ -27,24 +25,18 @@ func TestMoveWorksSimple(t *testing.T) {
 		Movement: 3,
 	}
 
-	sourceTile := awfdatautil.MapTileAt(g.Map, srcX, srcY)
+	sourceTile := awfdatautil.MapTileAt(g.Map, src)
 
 	sourceTile.Unit = unit
 
-	destinationTile := awfdatautil.MapTileAt(g.Map, destX, destY)
+	destinationTile := awfdatautil.MapTileAt(g.Map, dest)
 
 	// Just to be safe, clear it out
 	destinationTile.Unit = nil
 
 	cmd := &awfdata.CmdMove{
-		Origin: &awfdata.Point{
-			X: uint32(srcX),
-			Y: uint32(srcY),
-		},
-		Destination: &awfdata.Point{
-			X: uint32(destX),
-			Y: uint32(destY),
-		},
+		Source:      src,
+		Destination: dest,
 	}
 
 	err = Move(cmd, playerID, g)
@@ -71,10 +63,8 @@ func TestMoveWorksSimple(t *testing.T) {
 
 func TestMoveErrorsGracefullyOnOutOfBoundsMoves(t *testing.T) {
 	playerID := 3
-	srcX := 0
-	srcY := 0
-	destX := 1
-	destY := 2
+	src := &awfdata.Point{X: 0, Y: 0}
+	dest := &awfdata.Point{X: 1, Y: 1}
 	g, err := loaders.PrototypeGame()
 
 	if err != nil {
@@ -87,11 +77,11 @@ func TestMoveErrorsGracefullyOnOutOfBoundsMoves(t *testing.T) {
 		Movement: 3,
 	}
 
-	sourceTile := awfdatautil.MapTileAt(g.Map, srcX, srcY)
+	sourceTile := awfdatautil.MapTileAt(g.Map, src)
 
 	sourceTile.Unit = unit
 
-	destinationTile := awfdatautil.MapTileAt(g.Map, destX, destY)
+	destinationTile := awfdatautil.MapTileAt(g.Map, dest)
 
 	// Just to be safe, clear it out
 	destinationTile.Unit = nil
@@ -99,42 +89,30 @@ func TestMoveErrorsGracefullyOnOutOfBoundsMoves(t *testing.T) {
 	// Now try to do bad moves
 	cmds := []*awfdata.CmdMove{
 		&awfdata.CmdMove{
-			Origin: &awfdata.Point{
+			Source: &awfdata.Point{
 				X: g.Map.Width,
-				Y: uint32(srcY),
+				Y: src.Y,
 			},
-			Destination: &awfdata.Point{
-				X: uint32(destX),
-				Y: uint32(destY),
-			},
+			Destination: dest,
 		},
 		&awfdata.CmdMove{
-			Origin: &awfdata.Point{
-				X: uint32(srcX),
+			Source: &awfdata.Point{
+				X: src.X,
 				Y: g.Map.Height,
 			},
-			Destination: &awfdata.Point{
-				X: uint32(destX),
-				Y: uint32(destY),
-			},
+			Destination: dest,
 		},
 		&awfdata.CmdMove{
-			Origin: &awfdata.Point{
-				X: uint32(srcX),
-				Y: uint32(srcY),
-			},
+			Source: src,
 			Destination: &awfdata.Point{
 				X: g.Map.Width,
-				Y: uint32(destY),
+				Y: dest.Y,
 			},
 		},
 		&awfdata.CmdMove{
-			Origin: &awfdata.Point{
-				X: uint32(srcX),
-				Y: uint32(srcY),
-			},
+			Source: src,
 			Destination: &awfdata.Point{
-				X: uint32(destX),
+				X: dest.X,
 				Y: g.Map.Height,
 			},
 		},
@@ -145,8 +123,8 @@ func TestMoveErrorsGracefullyOnOutOfBoundsMoves(t *testing.T) {
 
 		if err == nil {
 			t.Errorf("Expected error but didn't get one when moving from (%d, %d) to (%d, %d)",
-				cmd.Origin.X,
-				cmd.Origin.Y,
+				cmd.Source.X,
+				cmd.Source.Y,
 				cmd.Destination.X,
 				cmd.Destination.Y)
 		}
@@ -155,10 +133,8 @@ func TestMoveErrorsGracefullyOnOutOfBoundsMoves(t *testing.T) {
 
 func TestMoveErrorsFromWrongPlayer(t *testing.T) {
 	playerID := 3
-	srcX := 0
-	srcY := 0
-	destX := 1
-	destY := 2
+	src := &awfdata.Point{X: 0, Y: 0}
+	dest := &awfdata.Point{X: 1, Y: 2}
 	g, err := loaders.PrototypeGame()
 
 	if err != nil {
@@ -171,24 +147,18 @@ func TestMoveErrorsFromWrongPlayer(t *testing.T) {
 		Movement: 3,
 	}
 
-	sourceTile := awfdatautil.MapTileAt(g.Map, srcX, srcY)
+	sourceTile := awfdatautil.MapTileAt(g.Map, src)
 
 	sourceTile.Unit = unit
 
-	destinationTile := awfdatautil.MapTileAt(g.Map, destX, destY)
+	destinationTile := awfdatautil.MapTileAt(g.Map, dest)
 
 	// Just to be safe, clear it out
 	destinationTile.Unit = nil
 
 	cmd := &awfdata.CmdMove{
-		Origin: &awfdata.Point{
-			X: uint32(srcX),
-			Y: uint32(srcY),
-		},
-		Destination: &awfdata.Point{
-			X: uint32(destX),
-			Y: uint32(destY),
-		},
+		Source:      src,
+		Destination: dest,
 	}
 
 	// Use the wrong player ID
@@ -209,10 +179,8 @@ func TestMoveErrorsFromWrongPlayer(t *testing.T) {
 
 func TestMoveErrorsFromOutOfRange(t *testing.T) {
 	playerID := 3
-	srcX := 0
-	srcY := 0
-	destX := 2
-	destY := 2
+	src := &awfdata.Point{X: 0, Y: 0}
+	dest := &awfdata.Point{X: 2, Y: 2}
 	movement := 3 // need 4, so this should error
 	g, err := loaders.PrototypeGame()
 
@@ -226,24 +194,18 @@ func TestMoveErrorsFromOutOfRange(t *testing.T) {
 		Movement: uint32(movement),
 	}
 
-	sourceTile := awfdatautil.MapTileAt(g.Map, srcX, srcY)
+	sourceTile := awfdatautil.MapTileAt(g.Map, src)
 
 	sourceTile.Unit = unit
 
-	destinationTile := awfdatautil.MapTileAt(g.Map, destX, destY)
+	destinationTile := awfdatautil.MapTileAt(g.Map, dest)
 
 	// Just to be safe, clear it out
 	destinationTile.Unit = nil
 
 	cmd := &awfdata.CmdMove{
-		Origin: &awfdata.Point{
-			X: uint32(srcX),
-			Y: uint32(srcY),
-		},
-		Destination: &awfdata.Point{
-			X: uint32(destX),
-			Y: uint32(destY),
-		},
+		Source:      src,
+		Destination: dest,
 	}
 
 	err = Move(cmd, playerID, g)
@@ -263,10 +225,8 @@ func TestMoveErrorsFromOutOfRange(t *testing.T) {
 
 func TestMoveOnlyOncePerTurn(t *testing.T) {
 	playerID := 3
-	srcX := 0
-	srcY := 0
-	destX := 1
-	destY := 1
+	src := &awfdata.Point{X: 0, Y: 0}
+	dest := &awfdata.Point{X: 1, Y: 1}
 	movement := 3 // this is one more than required
 	g, err := loaders.PrototypeGame()
 
@@ -280,24 +240,18 @@ func TestMoveOnlyOncePerTurn(t *testing.T) {
 		Movement: uint32(movement),
 	}
 
-	sourceTile := awfdatautil.MapTileAt(g.Map, srcX, srcY)
+	sourceTile := awfdatautil.MapTileAt(g.Map, src)
 
 	sourceTile.Unit = unit
 
-	destinationTile := awfdatautil.MapTileAt(g.Map, destX, destY)
+	destinationTile := awfdatautil.MapTileAt(g.Map, dest)
 
 	// Just to be safe, clear it out
 	destinationTile.Unit = nil
 
 	cmd := &awfdata.CmdMove{
-		Origin: &awfdata.Point{
-			X: uint32(srcX),
-			Y: uint32(srcY),
-		},
-		Destination: &awfdata.Point{
-			X: uint32(destX),
-			Y: uint32(destY),
-		},
+		Source:      src,
+		Destination: dest,
 	}
 
 	// Should be fine here
@@ -323,10 +277,10 @@ func TestMoveOnlyOncePerTurn(t *testing.T) {
 	}
 
 	// Now try to sneakily move again one square...
-	cmd.Origin = cmd.Destination
+	cmd.Source = cmd.Destination
 	cmd.Destination = &awfdata.Point{
-		X: cmd.Origin.X + 1,
-		Y: cmd.Origin.Y,
+		X: cmd.Source.X + 1,
+		Y: cmd.Source.Y,
 	}
 
 	// Sanity check to make sure we're testing the right thing

@@ -28,9 +28,9 @@ func PrototypeMap() *awfdata.Map {
 	}
 
 	objTiles := []*awfdata.Map_Tile{
-		awfdatautil.MapTileAt(m, 1, 1),
-		awfdatautil.MapTileAt(m, 3, 4),
-		awfdatautil.MapTileAt(m, 6, 8),
+		awfdatautil.MapTileAt(m, &awfdata.Point{X: 1, Y: 1}),
+		awfdatautil.MapTileAt(m, &awfdata.Point{X: 3, Y: 4}),
+		awfdatautil.MapTileAt(m, &awfdata.Point{X: 6, Y: 8}),
 	}
 
 	for _, tile := range objTiles {
@@ -89,8 +89,8 @@ func PrototypeGame() (*awfdata.Game, error) {
 		},
 	}
 
-	topTile := awfdatautil.MapTileAt(m, int(m.Width/2), 0)
-	bottomTile := awfdatautil.MapTileAt(m, int(m.Width/2), int(m.Height-1))
+	topTile := awfdatautil.MapTileAt(m, &awfdata.Point{X: m.Width / 2, Y: 0})
+	bottomTile := awfdatautil.MapTileAt(m, &awfdata.Point{X: m.Width / 2, Y: m.Height - 1})
 
 	var err error
 

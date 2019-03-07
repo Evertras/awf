@@ -57,8 +57,8 @@ To verify, should see "Hello World" in console when loading page via server.
 ### 0.3.0 - Foundational logic
 
 * [ ] Functionality to determine potential movement for a unit on a map
-* [ ] General framework for commands and state changes
-* [ ] Ability to move a unit in code via command
+* [x] General framework for commands and state changes
+* [x] Ability to move a unit in code via command
 
 ### ???
 
@@ -67,6 +67,6 @@ To verify, should see "Hello World" in console when loading page via server.
 ### 0.X.0 - Front End Basic
 
 * [ ] A level is loaded and visible with distinguishable terrain
-* [ ] A few units are loaded and visible on some tile
+* [ ] A few units are loaded and visible on some tiles
 * [ ] The player can click the unit and see potential destinations, then click again to move the unit there
-* [ ] This process can be repeated infinite times, with one unit moving at a time unlimited times
+* [ ] The player can hit 'end turn' to start a new turn (no opponents yet)

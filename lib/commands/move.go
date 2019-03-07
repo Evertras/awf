@@ -11,14 +11,14 @@ import (
 // Returns an error if the move is invalid for any reason.
 func Move(cmd *awfdata.CmdMove, playerIndex int, g *awfdata.Game) error {
 	// Because this is a user command, we need to be careful about inputs
-	if !awfdatautil.PointInside(cmd.Origin, g.Map) {
-		return errors.New("origin point outside map")
+	if !awfdatautil.PointInside(cmd.Source, g.Map) {
+		return errors.New("source point outside map")
 	}
 	if !awfdatautil.PointInside(cmd.Destination, g.Map) {
 		return errors.New("destination point outside map")
 	}
 
-	srcTile := awfdatautil.MapTileAt(g.Map, int(cmd.Origin.X), int(cmd.Origin.Y))
+	srcTile := awfdatautil.MapTileAt(g.Map, cmd.Source)
 
 	if srcTile.Unit == nil {
 		return errors.New("no unit found")
@@ -34,13 +34,13 @@ func Move(cmd *awfdata.CmdMove, playerIndex int, g *awfdata.Game) error {
 		return errors.New("unit already moved")
 	}
 
-	destTile := awfdatautil.MapTileAt(g.Map, int(cmd.Destination.X), int(cmd.Destination.Y))
+	destTile := awfdatautil.MapTileAt(g.Map, cmd.Destination)
 
 	if destTile.Unit != nil {
 		return errors.New("destination occupied")
 	}
 
-	distance := awfdatautil.ManhattenDistance(cmd.Origin, cmd.Destination)
+	distance := awfdatautil.ManhattenDistance(cmd.Source, cmd.Destination)
 
 	if unit.Movement < distance {
 		return errors.New("not enough movement")

@@ -4,6 +4,6 @@ package awfdata;
 import "point.proto";
 
 message CmdMove {
-    Point origin = 1;
+    Point source = 1;
     Point destination = 2;
 }
