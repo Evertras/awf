@@ -36,7 +36,14 @@ func Move(cmd *awfdata.CmdMove, playerIndex int, g *awfdata.Game) error {
 		return errors.New("destination occupied")
 	}
 
-	// TODO: Movement points, terrain, etc... this is naive and bad but a starting point
+	requiredMovement := awfdatautil.ManhattenDistance(cmd.Origin, cmd.Destination)
+
+	if unit.Movement < requiredMovement {
+		return errors.New("not enough movement")
+	}
+
+	// TODO: terrain
+
 	destTile.Unit = srcTile.Unit
 	srcTile.Unit = nil
 

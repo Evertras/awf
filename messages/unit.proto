@@ -12,9 +12,9 @@ message Unit {
     uint32 owner = 11;
 
     string name = 1;
-    int32 movement = 2;
-    int32 strength = 3;
-    int32 vision = 4;
+    uint32 movement = 2;
+    uint32 strength = 3;
+    uint32 vision = 4;
 
     // For any terrain that costs something other than 1 for this unit
     map<string, uint32> terrain_costs = 10;
