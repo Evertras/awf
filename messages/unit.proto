@@ -26,5 +26,6 @@ message Unit {
     int32 attack_modifier = 8;
     Ranged ranged = 9;
 
-    // Abilities
+    // Game state
+    bool moved = 12;
 }

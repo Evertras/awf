@@ -27,7 +27,11 @@ func Move(cmd *awfdata.CmdMove, playerIndex int, g *awfdata.Game) error {
 	unit := srcTile.Unit
 
 	if unit.Owner != uint32(playerIndex) {
-		return errors.New("tried to move another player's unit")
+		return errors.New("unit belongs to another player")
+	}
+
+	if unit.Moved {
+		return errors.New("unit already moved")
 	}
 
 	destTile := awfdatautil.MapTileAt(g.Map, int(cmd.Destination.X), int(cmd.Destination.Y))
@@ -36,16 +40,18 @@ func Move(cmd *awfdata.CmdMove, playerIndex int, g *awfdata.Game) error {
 		return errors.New("destination occupied")
 	}
 
-	requiredMovement := awfdatautil.ManhattenDistance(cmd.Origin, cmd.Destination)
+	distance := awfdatautil.ManhattenDistance(cmd.Origin, cmd.Destination)
 
-	if unit.Movement < requiredMovement {
+	if unit.Movement < distance {
 		return errors.New("not enough movement")
 	}
 
 	// TODO: terrain
 
-	destTile.Unit = srcTile.Unit
+	destTile.Unit = unit
 	srcTile.Unit = nil
+
+	unit.Moved = true
 
 	return nil
 }
