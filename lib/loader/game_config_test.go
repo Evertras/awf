@@ -2,7 +2,7 @@ package loader
 
 import "testing"
 
-const sample string = `
+const sampleGameConfig string = `
 terrain:
   - name: Sample
   - name: Another
@@ -13,7 +13,7 @@ terrain:
 // Quickly sanity check to make sure our YAML decoder works as expected with generated proto
 // messages (which don't have yaml labels), don't need to check everything...
 func TestGameConfigYAMLSanityCheck(t *testing.T) {
-	decoded, err := decodeYAML([]byte(sample))
+	decoded, err := decodeGameConfigYAML([]byte(sampleGameConfig))
 
 	if err != nil {
 		t.Fatal(err)

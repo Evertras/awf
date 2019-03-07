@@ -15,10 +15,10 @@ func LoadGameConfigYAML(filename string) (*awfdata.GameConfig, error) {
 		return nil, err
 	}
 
-	return decodeYAML(contents)
+	return decodeGameConfigYAML(contents)
 }
 
-func decodeYAML(data []byte) (*awfdata.GameConfig, error) {
+func decodeGameConfigYAML(data []byte) (*awfdata.GameConfig, error) {
 	t := &awfdata.GameConfig{}
 
 	if err := yaml.Unmarshal(data, t); err != nil {
