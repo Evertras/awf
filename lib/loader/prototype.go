@@ -20,8 +20,10 @@ func PrototypeMap() *awfdata.Map {
 
 	for i := 0; i < int(totalTiles); i++ {
 		// Intentionally giving it a weird name to make sure we're not hardcoding anything elsewhere
-		m.Tiles[i].Terrain = &awfdata.Terrain{
-			Name: "PrototypeOpen",
+		m.Tiles[i] = &awfdata.Map_Tile{
+			Terrain: &awfdata.Terrain{
+				Name: "PrototypeOpen",
+			},
 		}
 	}
 
@@ -38,4 +40,71 @@ func PrototypeMap() *awfdata.Map {
 	}
 
 	return m
+}
+
+// PrototypeFaction returns a simple prototype faction to play with
+func PrototypeFaction() *awfdata.Faction {
+	units := []*awfdata.Unit{
+		&awfdata.Unit{
+			Name:      "Infantry",
+			Movement:  2,
+			Strength:  5,
+			Vision:    2,
+			Capturing: true,
+		},
+
+		&awfdata.Unit{
+			Name:           "Cavalry",
+			Movement:       4,
+			Strength:       3,
+			AttackModifier: 4,
+			Vision:         2,
+			TerrainCosts: map[string]uint32{
+				"PrototypeObjective": 2,
+			},
+		},
+	}
+
+	f := &awfdata.Faction{
+		Name:  "Prototype",
+		Units: units,
+	}
+
+	return f
+}
+
+// PrototypeGame returns a basic game beginning state for testing/dev purposes
+func PrototypeGame() (*awfdata.Game, error) {
+	m := PrototypeMap()
+
+	g := &awfdata.Game{
+		Map: m,
+		Players: []*awfdata.Game_Player{
+			&awfdata.Game_Player{
+				Faction: PrototypeFaction(),
+			},
+			&awfdata.Game_Player{
+				Faction: PrototypeFaction(),
+			},
+		},
+	}
+
+	topTile := awfdatautil.MapTileAt(m, int(m.Width/2), 0)
+	bottomTile := awfdatautil.MapTileAt(m, int(m.Width/2), int(m.Height-1))
+
+	var err error
+
+	topTile.Unit, err = awfdatautil.SpawnUnit(g.Players[0].Faction.Units[0], 0)
+
+	if err != nil {
+		return nil, err
+	}
+
+	bottomTile.Unit, err = awfdatautil.SpawnUnit(g.Players[1].Faction.Units[0], 1)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return g, nil
 }

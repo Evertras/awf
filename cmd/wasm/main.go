@@ -4,6 +4,8 @@ package main
 
 import (
 	"syscall/js"
+
+	"github.com/Evertras/awf/lib/loader"
 )
 
 func sayHello(args []js.Value) {
@@ -22,6 +24,14 @@ func main() {
 	base := js.Global().Get("gowasm")
 
 	registerCallbacks(base)
+
+	g, err := loader.PrototypeGame()
+
+	if err != nil {
+		println(err)
+	} else {
+		println(len(g.Players))
+	}
 
 	println("Hello WASM World")
 

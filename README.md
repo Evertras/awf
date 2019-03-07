@@ -50,13 +50,15 @@ To verify, should see "Hello World" in console when loading page via server.
 * [x] Units defined in code
 * [x] Terrain defined in code
 * [x] Can load unit/terrain types via YAML
-* [ ] Map data defined in code
-* [ ] Sample prototype map can be loaded on demand
+* [x] Map data defined in code
+* [x] Sample prototype map can be loaded on demand
+* [ ] Game in progress defined in code with units belonging to different players on map
 
 ### 0.3.0 - Foundational logic
 
 * [ ] Functionality to determine potential movement for a unit on a map
-* [ ] TBD
+* [ ] General framework for commands and state changes
+* [ ] Ability to move a unit in code via command
 
 ### ???
 

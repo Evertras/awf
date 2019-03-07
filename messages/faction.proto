@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package awfdata;
 
-import "unit_template.proto";
+import "unit.proto";
 
 message Faction {
     string name = 1;
-    repeated UnitTemplate units = 2;
+    repeated Unit units = 2;
 }

@@ -2,11 +2,14 @@ syntax = "proto3";
 
 package awfdata;
 
-message UnitTemplate {
+message Unit {
     message Ranged {
         uint32 minimum = 1;
         uint32 maximum = 2;
     }
+
+    // Zero-indexed player ID
+    uint32 owner = 11;
 
     string name = 1;
     int32 movement = 2;

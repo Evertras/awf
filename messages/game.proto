@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package awfdata;
+
+import "map.proto";
+import "faction.proto";
+
+message Game {
+    message Player {
+        Faction faction = 1;
+    }
+
+    Map map = 1;
+
+    repeated Player players = 2;
+
+    // Zero indexed, corresponds to the location in the players list above
+    uint32 active_player = 3;
+
+    // A turn is over after all players have gone
+    uint32 turn = 4;
+}
