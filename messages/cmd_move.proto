@@ -1,0 +1,9 @@
+syntax = "proto3";
+package awfdata;
+
+import "point.proto";
+
+message CmdMove {
+    Point origin = 1;
+    Point destination = 2;
+}

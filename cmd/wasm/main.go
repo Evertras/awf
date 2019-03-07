@@ -5,7 +5,7 @@ package main
 import (
 	"syscall/js"
 
-	"github.com/Evertras/awf/lib/loader"
+	"github.com/Evertras/awf/lib/loaders"
 )
 
 func sayHello(args []js.Value) {
@@ -25,7 +25,7 @@ func main() {
 
 	registerCallbacks(base)
 
-	g, err := loader.PrototypeGame()
+	g, err := loaders.PrototypeGame()
 
 	if err != nil {
 		println(err)

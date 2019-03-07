@@ -1,4 +1,4 @@
-package loader
+package loaders
 
 import (
 	"github.com/Evertras/awf/lib/awfdata"
