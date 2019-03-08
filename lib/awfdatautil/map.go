@@ -7,6 +7,7 @@ func MapTileAt(m *awfdata.Map, p *awfdata.Point) *awfdata.Map_Tile {
 	return m.Tiles[p.Y*m.Width+p.X]
 }
 
+// PotentialMoves returns all potential destination squares for the unit
 func PotentialMoves(m *awfdata.Map, p *awfdata.Point) []*awfdata.Point {
 	tile := MapTileAt(m, p)
 
@@ -27,12 +28,21 @@ func PotentialMoves(m *awfdata.Map, p *awfdata.Point) []*awfdata.Point {
 
 	potentials := make(map[uint64]bool)
 
-	// Start at the unit's position, then branch out from there
-	var explore func(p *awfdata.Point, move uint32)
-	explore = func(p *awfdata.Point, move uint32) {
+	// Start at the unit's position, then branch out from there... likely some major gains here, could
+	// be worth optimizing if used enough (AI in particular).  See benchmarks in map_test.go
+	var explore func(p *awfdata.Point, move uint32, last *awfdata.Point)
+	explore = func(p *awfdata.Point, move uint32, last *awfdata.Point) {
 		h := hash(p)
 
-		potentials[h] = true
+		unit := MapTileAt(m, p).Unit
+
+		// Can't end a move on an occupied tile
+		if unit == nil {
+			potentials[h] = true
+		} else if unit.Owner != tile.Unit.Owner {
+			// Can't pass through other players' units, only our own
+			return
+		}
 
 		if move == 0 {
 			return
@@ -40,33 +50,31 @@ func PotentialMoves(m *awfdata.Map, p *awfdata.Point) []*awfdata.Point {
 
 		move--
 
-		if p.Y > 0 {
-			explore(&awfdata.Point{X: p.X, Y: p.Y - 1}, move)
+		if p.Y > 0 && last.Y >= p.Y {
+			explore(&awfdata.Point{X: p.X, Y: p.Y - 1}, move, p)
 		}
 
-		if p.Y < m.Height {
-			explore(&awfdata.Point{X: p.X, Y: p.Y + 1}, move)
+		if p.Y < m.Height && last.Y <= p.Y {
+			explore(&awfdata.Point{X: p.X, Y: p.Y + 1}, move, p)
 		}
 
-		if p.X > 0 {
-			explore(&awfdata.Point{X: p.X - 1, Y: p.Y}, move)
+		if p.X > 0 && last.X >= p.X {
+			explore(&awfdata.Point{X: p.X - 1, Y: p.Y}, move, p)
 		}
 
-		if p.X < m.Width {
-			explore(&awfdata.Point{X: p.X + 1, Y: p.Y}, move)
+		if p.X < m.Width && last.X <= p.X {
+			explore(&awfdata.Point{X: p.X + 1, Y: p.Y}, move, p)
 		}
 	}
 
-	explore(p, tile.Unit.Movement)
+	explore(p, tile.Unit.Movement, p)
 
-	results := make([]*awfdata.Point, len(potentials)-1)[:0]
+	results := make([]*awfdata.Point, len(potentials))[:0]
 
 	for k := range potentials {
 		res := unhash(k)
 
-		if !(res.X == p.X && res.Y == p.Y) {
-			results = append(results, unhash(k))
-		}
+		results = append(results, res)
 	}
 
 	return results

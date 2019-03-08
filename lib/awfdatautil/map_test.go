@@ -8,31 +8,18 @@ import (
 )
 
 func TestMapTileAt(t *testing.T) {
-	width := 5
-	height := 10
-	totalTiles := width * height
+	m := generateSampleOpenMap()
 
-	m := &awfdata.Map{
-		Width:  uint32(width),
-		Height: uint32(height),
-		Tiles:  make([]*awfdata.Map_Tile, totalTiles),
+	for i := uint32(0); i < sampleTotalTiles; i++ {
+		m.Tiles[i].Terrain.Name = fmt.Sprintf("Test%d%d", i%sampleWidth, i/sampleWidth)
 	}
 
-	for i := 0; i < totalTiles; i++ {
-		m.Tiles[i] = &awfdata.Map_Tile{
-			Terrain: &awfdata.Terrain{
-				Name:            fmt.Sprintf("Test%d%d", i%width, i/width),
-				DefenseModifier: int32(i),
-			},
-		}
-	}
-
-	for x := 0; x < width; x++ {
-		for y := 0; y < height; y++ {
+	for x := uint32(0); x < sampleWidth; x++ {
+		for y := uint32(0); y < sampleHeight; y++ {
 			expectedName := fmt.Sprintf("Test%d%d", x, y)
 			tile := MapTileAt(m, &awfdata.Point{
-				X: uint32(x),
-				Y: uint32(y),
+				X: x,
+				Y: y,
 			})
 
 			if tile.Terrain.Name != expectedName {
@@ -43,25 +30,9 @@ func TestMapTileAt(t *testing.T) {
 }
 
 func TestPotentialMovement(t *testing.T) {
-	width := 20
-	height := 20
-	totalTiles := width * height
+	m := generateSampleOpenMap()
 
-	m := &awfdata.Map{
-		Width:  uint32(width),
-		Height: uint32(height),
-		Tiles:  make([]*awfdata.Map_Tile, totalTiles),
-	}
-
-	for i := 0; i < totalTiles; i++ {
-		m.Tiles[i] = &awfdata.Map_Tile{
-			Terrain: &awfdata.Terrain{
-				Name: "Open",
-			},
-		}
-	}
-
-	center := &awfdata.Point{X: uint32(width / 2), Y: uint32(width / 2)}
+	center := &awfdata.Point{X: uint32(sampleWidth / 2), Y: uint32(sampleHeight / 2)}
 
 	origin := MapTileAt(m, center)
 	expectedLens := []int{
@@ -105,5 +76,27 @@ func TestPotentialMovement(t *testing.T) {
 				}
 			}
 		}
+	}
+}
+
+func BenchmarkPotentialMoves(b *testing.B) {
+	m := generateSampleOpenMap()
+
+	center := &awfdata.Point{X: sampleWidth / 2, Y: sampleHeight / 2}
+
+	origin := MapTileAt(m, center)
+
+	origin.Unit = &awfdata.Unit{
+		Name:     "SampleMover",
+		Movement: 0,
+	}
+
+	for movement := uint32(0); movement <= 8; movement++ {
+		b.Run(fmt.Sprintf("Movement %d", movement), func(b *testing.B) {
+			origin.Unit.Movement = movement
+			for i := 0; i < b.N; i++ {
+				PotentialMoves(m, center)
+			}
+		})
 	}
 }
