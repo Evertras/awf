@@ -50,9 +50,9 @@ func PotentialMoves(m *awfdata.Map, p *awfdata.Point) []*awfdata.Point {
 
 		if cost > move {
 			return
-		} else {
-			move -= cost
 		}
+
+		move -= cost
 
 		// Can't end a move on an occupied tile
 		if unit == nil {
