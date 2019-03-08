@@ -5,6 +5,9 @@ package main
 import (
 	"syscall/js"
 
+	"github.com/Evertras/awf/lib/awfdatautil"
+
+	"github.com/Evertras/awf/lib/awfdata"
 	"github.com/Evertras/awf/lib/loaders"
 )
 
@@ -27,10 +30,22 @@ func main() {
 
 	g, err := loaders.PrototypeGame()
 
+	g.Map.Tiles[0].Unit = &awfdata.Unit{
+		Name:     "SampleMover",
+		Movement: 3,
+	}
+
+	potentials := awfdatautil.PotentialMoves(g.Map, &awfdata.Point{X: 0, Y: 0})
+
+	println("Unit at (0,0) can move to:")
+	for _, p := range potentials {
+		println("(", p.X, ", ", p.Y, ")")
+	}
+
 	if err != nil {
 		println(err)
 	} else {
-		println(len(g.Players))
+		println("Player count:", len(g.Players))
 	}
 
 	println("Hello WASM World")

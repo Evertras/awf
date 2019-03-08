@@ -56,7 +56,7 @@ To verify, should see "Hello World" in console when loading page via server.
 
 ### 0.3.0 - Foundational logic
 
-* [ ] Functionality to determine potential movement for a unit on a map
+* [x] Functionality to determine potential movement for a unit on a map
 * [x] General framework for commands and state changes
 * [x] Ability to move a unit in code via command
 
