@@ -40,13 +40,20 @@ func Move(cmd *awfdata.CmdMove, playerIndex int, g *awfdata.Game) error {
 		return errors.New("destination occupied")
 	}
 
-	distance := awfdatautil.ManhattenDistance(cmd.Source, cmd.Destination)
+	potentials := awfdatautil.PotentialMoves(g.Map, cmd.Source)
 
-	if unit.Movement < distance {
-		return errors.New("not enough movement")
+	found := false
+
+	for _, potential := range potentials {
+		if potential.X == cmd.Destination.X && potential.Y == cmd.Destination.Y {
+			found = true
+			break
+		}
 	}
 
-	// TODO: terrain
+	if !found {
+		return errors.New("cannot reach the destination")
+	}
 
 	destTile.Unit = unit
 	srcTile.Unit = nil
