@@ -54,7 +54,7 @@ func PotentialMoves(m *awfdata.Map, p *awfdata.Point) []*awfdata.Point {
 
 		move -= cost
 
-		// Can't end a move on an occupied tile
+		// Can't end a move on an occupied tile; conveniently, this excludes the square we start on too
 		if unit == nil {
 			potentials[h] = true
 		} else if unit.Owner != source.Unit.Owner {
