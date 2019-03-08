@@ -1,6 +1,8 @@
 package awfdatautil
 
-import "github.com/Evertras/awf/lib/awfdata"
+import (
+	"github.com/Evertras/awf/lib/awfdata"
+)
 
 // MapTileAt returns the map tile located at x, y; no bounds checking, be careful!
 func MapTileAt(m *awfdata.Map, p *awfdata.Point) *awfdata.Map_Tile {
@@ -9,9 +11,9 @@ func MapTileAt(m *awfdata.Map, p *awfdata.Point) *awfdata.Map_Tile {
 
 // PotentialMoves returns all potential destination squares for the unit
 func PotentialMoves(m *awfdata.Map, p *awfdata.Point) []*awfdata.Point {
-	tile := MapTileAt(m, p)
+	source := MapTileAt(m, p)
 
-	if tile.Unit == nil {
+	if source.Unit == nil {
 		return nil
 	}
 
@@ -32,23 +34,33 @@ func PotentialMoves(m *awfdata.Map, p *awfdata.Point) []*awfdata.Point {
 	// be worth optimizing if used enough (AI in particular).  See benchmarks in map_test.go
 	var explore func(p *awfdata.Point, move uint32, last *awfdata.Point)
 	explore = func(p *awfdata.Point, move uint32, last *awfdata.Point) {
+		var cost uint32
+		var ok bool
 		h := hash(p)
 
-		unit := MapTileAt(m, p).Unit
+		tile := MapTileAt(m, p)
+		unit := tile.Unit
+
+		// Special case: if this is the first square, ignore it
+		if p == last {
+			cost = 0
+		} else if cost, ok = source.Unit.TerrainCosts[tile.Terrain.Name]; !ok {
+			cost = 1
+		}
+
+		if cost > move {
+			return
+		} else {
+			move -= cost
+		}
 
 		// Can't end a move on an occupied tile
 		if unit == nil {
 			potentials[h] = true
-		} else if unit.Owner != tile.Unit.Owner {
+		} else if unit.Owner != source.Unit.Owner {
 			// Can't pass through other players' units, only our own
 			return
 		}
-
-		if move == 0 {
-			return
-		}
-
-		move--
 
 		if p.Y > 0 && last.Y >= p.Y {
 			explore(&awfdata.Point{X: p.X, Y: p.Y - 1}, move, p)
@@ -67,7 +79,7 @@ func PotentialMoves(m *awfdata.Map, p *awfdata.Point) []*awfdata.Point {
 		}
 	}
 
-	explore(p, tile.Unit.Movement, p)
+	explore(p, source.Unit.Movement, p)
 
 	results := make([]*awfdata.Point, len(potentials))[:0]
 

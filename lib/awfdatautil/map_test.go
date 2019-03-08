@@ -29,7 +29,7 @@ func TestMapTileAt(t *testing.T) {
 	}
 }
 
-func TestPotentialMovement(t *testing.T) {
+func TestPotentialMovementOpenMap(t *testing.T) {
 	m := generateSampleOpenMap()
 
 	center := &awfdata.Point{X: uint32(sampleWidth / 2), Y: uint32(sampleHeight / 2)}
@@ -75,6 +75,38 @@ func TestPotentialMovement(t *testing.T) {
 					t.Error("Should not have duplicate moves")
 				}
 			}
+		}
+	}
+}
+
+func TestPotentialMovementTerrainCosts(t *testing.T) {
+	m := generateSampleOpenMap()
+
+	// Should be able to move 2 squares total
+	movement := 8
+	cost := 3
+
+	center := &awfdata.Point{X: uint32(sampleWidth / 2), Y: uint32(sampleHeight / 2)}
+
+	origin := MapTileAt(m, center)
+
+	terrainCosts := make(map[string]uint32)
+
+	terrainCosts[m.Tiles[0].Terrain.Name] = 3
+
+	origin.Unit = &awfdata.Unit{
+		Name:         "SampleMover",
+		Movement:     8,
+		TerrainCosts: terrainCosts,
+	}
+
+	moves := PotentialMoves(m, center)
+
+	for _, move := range moves {
+		dist := ManhattenDistance(move, center)
+
+		if dist > uint32(movement/cost) {
+			t.Fatal("Exceeded expected movement")
 		}
 	}
 }
