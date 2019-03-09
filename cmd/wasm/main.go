@@ -5,9 +5,8 @@ package main
 import (
 	"syscall/js"
 
-	"github.com/Evertras/awf/lib/awfdatautil"
-
 	"github.com/Evertras/awf/lib/awfdata"
+	"github.com/Evertras/awf/lib/awfdatautil"
 	"github.com/Evertras/awf/lib/loaders"
 )
 
