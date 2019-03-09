@@ -9,7 +9,6 @@ document.body.appendChild(app.view);
 app.renderer.view.style.position = 'absolute';
 app.renderer.view.style.display = 'block';
 
-// Resize function window
 function resize(): void {
     // Resize the renderer
     app.renderer.resize(window.innerWidth, window.innerHeight);
