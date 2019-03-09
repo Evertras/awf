@@ -58,7 +58,7 @@ body {
     overflow: hidden;
 }
 
-#playArea {
+#unused {
     background: white;
     display: block;
     margin: 0 auto; /* horizontally center */

@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"io"
 	"log"
 	"net/http"
 
@@ -35,48 +34,29 @@ func New(ctx context.Context, cfg Config) *Server {
 func (s *Server) Listen(addr string) error {
 	mux := http.NewServeMux()
 
-	// <jank>
-	// Note: the following is jank for prototype purposes, this should
-	// be an in-memory file system in a for-reals app... but this is easier
 	if s.cfg.ReadStaticFilesPerRequest {
 		mux.Handle("/", http.FileServer(http.Dir("front")))
 		log.Println("Reading files from disk for every request, ONLY USE THIS FOR DEV MODE!")
 	} else {
-		mux.HandleFunc("/lib/wasm_exec.js", func(w http.ResponseWriter, req *http.Request) {
-			w.Header().Set("Content-Type", "script/javascript")
-			io.WriteString(w, static.StaticJsWasmExec)
-		})
-		mux.HandleFunc("/lib/pixi.min.js", func(w http.ResponseWriter, req *http.Request) {
-			w.Header().Set("Content-Type", "script/javascript")
-			w.Header().Set("Content-Encoding", "gzip")
-			w.Write(static.StaticLibPixiJsGzip)
-		})
-		mux.HandleFunc("/game.js", func(w http.ResponseWriter, req *http.Request) {
-			w.Header().Set("Content-Type", "script/javascript")
-			io.WriteString(w, static.StaticJsGame)
-		})
-		mux.HandleFunc("/favicon.ico", func(w http.ResponseWriter, req *http.Request) {
-			w.Header().Set("Content-Type", "image/x-icon")
-			w.Write(static.StaticFavicon)
-		})
-		mux.HandleFunc("/style.css", func(w http.ResponseWriter, req *http.Request) {
-			w.Header().Set("Content-Type", "text/css")
-			io.WriteString(w, static.StaticCssStyle)
-		})
-		mux.HandleFunc("/lib.wasm", func(w http.ResponseWriter, req *http.Request) {
-			w.Header().Set("Content-Type", "application/wasm")
-			w.Header().Set("Content-Encoding", "gzip")
-			w.Write(static.StaticLibWasmGzip)
-		})
 		mux.HandleFunc("/assets/*", func(w http.ResponseWriter, req *http.Request) {
 			w.WriteHeader(404)
 		})
 		mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-			w.Header().Set("Content-Type", "text/html")
-			io.WriteString(w, static.StaticHtmlIndex)
+			file := req.RequestURI[1:]
+
+			if file == "" {
+				file = "index.html"
+			}
+
+			if data, ok := static.StaticGzipFileData[file]; ok {
+				w.Header().Set("Content-Type", data.Mime)
+				w.Header().Set("Content-Encoding", "gzip")
+				w.Write(data.Data)
+			} else {
+				w.WriteHeader(404)
+			}
 		})
 	}
-	// </jank>
 
 	//mux.HandleFunc("/join", join(s))
 
