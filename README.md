@@ -60,11 +60,7 @@ To verify, should see "Hello World" in console when loading page via server.
 * [x] General framework for commands and state changes
 * [x] Ability to move a unit in code via command
 
-### ???
-
-??? - Probably need some other stuff TBD
-
-### 0.X.0 - Front End Basic
+### 0.4.0 - Front End Basic
 
 * [ ] A level is loaded and visible with distinguishable terrain
 * [ ] A few units are loaded and visible on some tiles

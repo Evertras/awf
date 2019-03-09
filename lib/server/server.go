@@ -42,9 +42,14 @@ func (s *Server) Listen(addr string) error {
 		mux.Handle("/", http.FileServer(http.Dir("front")))
 		log.Println("Reading files from disk for every request, ONLY USE THIS FOR DEV MODE!")
 	} else {
-		mux.HandleFunc("/wasm_exec.js", func(w http.ResponseWriter, req *http.Request) {
+		mux.HandleFunc("/lib/wasm_exec.js", func(w http.ResponseWriter, req *http.Request) {
 			w.Header().Set("Content-Type", "script/javascript")
 			io.WriteString(w, static.StaticJsWasmExec)
+		})
+		mux.HandleFunc("/lib/pixi.min.js", func(w http.ResponseWriter, req *http.Request) {
+			w.Header().Set("Content-Type", "script/javascript")
+			w.Header().Set("Content-Encoding", "gzip")
+			w.Write(static.StaticLibPixiJsGzip)
 		})
 		mux.HandleFunc("/game.js", func(w http.ResponseWriter, req *http.Request) {
 			w.Header().Set("Content-Type", "script/javascript")
@@ -61,7 +66,7 @@ func (s *Server) Listen(addr string) error {
 		mux.HandleFunc("/lib.wasm", func(w http.ResponseWriter, req *http.Request) {
 			w.Header().Set("Content-Type", "application/wasm")
 			w.Header().Set("Content-Encoding", "gzip")
-			w.Write(static.StaticLibWasm)
+			w.Write(static.StaticLibWasmGzip)
 		})
 		mux.HandleFunc("/assets/*", func(w http.ResponseWriter, req *http.Request) {
 			w.WriteHeader(404)

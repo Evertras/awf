@@ -12,53 +12,42 @@ import (
 	"time"
 )
 
-func main() {
-	index, err := ioutil.ReadFile("../../front/index.html")
+func readRaw(filename string) []byte {
+	raw, err := ioutil.ReadFile("../../front/" + filename)
 
 	if err != nil {
 		panic(err)
 	}
 
-	wasmExec, err := ioutil.ReadFile("../../front/wasm_exec.js")
+	return raw
+}
 
-	if err != nil {
-		panic(err)
-	}
-
-	gameJs, err := ioutil.ReadFile("../../front/game.js")
-
-	if err != nil {
-		panic(err)
-	}
-
-	style, err := ioutil.ReadFile("../../front/style.css")
-
-	if err != nil {
-		panic(err)
-	}
-
-	favicon, err := ioutil.ReadFile("../../front/favicon.ico")
-
-	if err != nil {
-		panic(err)
-	}
-
-	wasm, err := ioutil.ReadFile("../../front/lib.wasm")
-
-	if err != nil {
-		panic(err)
-	}
+func readGzip(filename string) []byte {
+	raw := readRaw(filename)
 
 	var b bytes.Buffer
 
 	w := gzip.NewWriter(&b)
 
-	_, err = w.Write(wasm)
+	_, err := w.Write(raw)
 	w.Close()
 
 	if err != nil {
 		panic(err)
 	}
+
+	return b.Bytes()
+}
+
+func main() {
+	index := readRaw("index.html")
+	wasmExec := readRaw("lib/wasm_exec.js")
+	gameJs := readRaw("game.js")
+	style := readRaw("style.css")
+	favicon := readRaw("favicon.ico")
+
+	wasm := readGzip("lib.wasm")
+	pixi := readGzip("lib/pixi.min.js")
 
 	f, err := os.Create("build.go")
 	defer f.Close()
@@ -77,6 +66,7 @@ func main() {
 			Style        string
 			FaviconBytes []byte
 			WasmBytes    []byte
+			PixiBytes    []byte
 		}{
 			Timestamp:    time.Now(),
 			Index:        sanitize(string(index)),
@@ -84,7 +74,8 @@ func main() {
 			GameJs:       sanitize(string(gameJs)),
 			Style:        sanitize(string(style)),
 			FaviconBytes: favicon,
-			WasmBytes:    b.Bytes(),
+			WasmBytes:    wasm,
+			PixiBytes:    pixi,
 		})
 
 	if err != nil {
@@ -118,8 +109,14 @@ var StaticFavicon = []byte{
 	{{ range .FaviconBytes }} {{ . | printf "%#x," }} {{ end }}
 }
 
-// StaticLibWasm is the raw binary contents of lib.wasm
-var StaticLibWasm = []byte{
+// StaticLibPixiJsGzip is the gzipped PixiJS library
+var StaticLibPixiJsGzip = []byte{
+	// {{ len .PixiBytes }} bytes
+	{{ range .PixiBytes }} {{ . | printf "%#x," }} {{ end }}
+}
+
+// StaticLibWasm is the gzipped binary contents of lib.wasm
+var StaticLibWasmGzip = []byte{
 	// {{ len .WasmBytes }} bytes
 	{{ range .WasmBytes }} {{ . | printf "%#x," }} {{ end }}
 }`))
