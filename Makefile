@@ -42,7 +42,7 @@ protos: $(GO_PROTO_BUILD_DIR) messages/tsmessage
 front/game.js: node_modules messages/tsmessage $(TS_FILES)
 	npx webpack || (rm -f front/game.js && exit 1)
 
-lib/static/build.go: front/lib.wasm front/game.js front/lib/* lib/static/generate.go
+lib/static/build.go: front/lib.wasm front/game.js front/index.html front/style.css front/favicon.ico front/lib/* lib/static/generate.go
 	go generate ./lib/static/
 
 node_modules:
