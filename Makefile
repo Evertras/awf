@@ -74,4 +74,5 @@ front/assets/terrain.png front/assets/terrain.json: front/assets/raw/terrain/*
 	                  --trim-mode None \
 	                  --png-opt-level 0 \
 	                  --disable-auto-alias \
+	                  --shape-padding 2 \
 	                  front/assets/raw/terrain
