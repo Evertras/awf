@@ -1,6 +1,7 @@
 BINARY_NAME=awf
 TS_FILES=$(shell find front/src -name "*.ts")
 GO_PROTO_BUILD_DIR=lib/awfdata
+TEXTURE_PACKER=TexturePacker
 
 all: test build
 
@@ -42,7 +43,7 @@ protos: $(GO_PROTO_BUILD_DIR) messages/tsmessage
 front/game.js: node_modules messages/tsmessage $(TS_FILES)
 	npx webpack || (rm -f front/game.js && exit 1)
 
-lib/static/build.go: front/lib.wasm front/game.js front/index.html front/style.css front/favicon.ico front/lib/* lib/static/generate.go
+lib/static/build.go: front/lib.wasm front/game.js front/index.html front/style.css front/favicon.ico front/lib/* lib/static/generate.go front/assets/terrain.png front/assets/terrain.json
 	go generate ./lib/static/
 
 node_modules:
@@ -63,3 +64,14 @@ messages/tsmessage: node_modules messages/*.proto
 
 front/lib.wasm:
 	GOARCH=wasm GOOS=js go build -o front/lib.wasm cmd/wasm/main.go
+
+front/assets/terrain.png front/assets/terrain.json: front/assets/raw/terrain/*
+	$(TEXTURE_PACKER) --format pixijs4 \
+	                  --sheet front/assets/terrain.png \
+	                  --data front/assets/terrain.json \
+	                  --algorithm Basic \
+	                  --extrude 0 \
+	                  --trim-mode None \
+	                  --png-opt-level 0 \
+	                  --disable-auto-alias \
+	                  front/assets/raw/terrain
