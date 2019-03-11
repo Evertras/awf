@@ -29,7 +29,7 @@ bench:
 	go test -v -benchmem -bench . ./lib/...
 
 run-dev: front/game.js lib/static/build.go
-	go run -race ./cmd/server/main.go -d -t 3
+	go run -race ./cmd/server/main.go -d
 
 docker: clean build
 	docker build --rm -t evertras/$(BINARY_NAME) .
@@ -37,7 +37,7 @@ docker: clean build
 protos: $(GO_PROTO_BUILD_DIR) messages/tsmessage
 
 # These are not files, so always run them when asked to
-.PHONY: all clean test build bench run-dev proto
+.PHONY: all clean test build bench run-dev protos
 
 # Actual files/directories that must be generated
 front/game.js: node_modules messages/tsmessage $(TS_FILES)
