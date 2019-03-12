@@ -29,6 +29,14 @@ function ready() {
         console.log('Everything loaded');
 
         gowasm.sayHello();
+
+        gowasm.initPrototype((err?: string) => {
+            if (err) {
+                return console.error(err);
+            }
+
+            console.log('Successfully loaded a prototype game');
+        });
     }
 }
 
