@@ -1,5 +1,5 @@
 import { awfdata } from '../../messages/tsmessage/messages';
-import { loadAssets, textureGrass } from './assets';
+import { loadAssets, textureGrass, textureObjectiveNeutral, tileSize } from './assets';
 import { loadWASM } from './wasmloader';
 
 console.log('Hello Typescript World!');
@@ -38,13 +38,39 @@ function ready() {
 
             console.log('Successfully loaded a prototype game');
 
-            const cb = (errState: string | undefined, state: Uint8Array) => {
+            const cb = (errState: string | undefined, raw: Uint8Array) => {
                 if (errState) {
                     return console.error(errState);
                 }
 
-                awfdata.Game.decode(state);
-            };
+                const state = awfdata.Game.decode(raw);
+                const map = state.map;
+
+                // This is a little ridiculous, but protobuf makes it necessary...
+                if (map && map.width && map.height && map.tiles && map.terrain) {
+                    for (let x = 0; x < map.width; x++) {
+                        for (let y = 0; y < map.height; y++) {
+                            let tex: PIXI.Texture;
+
+                            switch (map.tiles[y * map.width + x].terrainId) {
+                                case 2:
+                                    tex = textureObjectiveNeutral();
+                                    break;
+
+                                default:
+                                tex = textureGrass();
+                            }
+
+                            const tile = new PIXI.Sprite(tex);
+
+                            tile.x = tileSize * x;
+                            tile.y = tileSize * y;
+
+                            app.stage.addChild(tile);
+                        }
+                    }
+                }
+           };
 
             gowasm.getGameState(cb);
         });
@@ -52,8 +78,6 @@ function ready() {
 }
 
 loadAssets(() => {
-    const texGrass = textureGrass();
-    app.stage.addChild(new PIXI.Sprite(texGrass));
 
     ready();
 });

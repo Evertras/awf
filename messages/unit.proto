@@ -17,7 +17,7 @@ message Unit {
     uint32 vision = 4;
 
     // For any terrain that costs something other than 1 for this unit
-    map<string, uint32> terrain_costs = 10;
+    map<uint32, uint32> terrain_costs = 10;
 
     // Attributes
     bool capturing = 5;

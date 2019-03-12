@@ -10,10 +10,10 @@ func BenchmarkCopyUnit(b *testing.B) {
 	u := &awfdata.Unit{
 		AttackModifier: 1,
 		Name:           "Some long name",
-		TerrainCosts: map[string]uint32{
-			"Forest": 17,
-			"Tundra": 381,
-			"Lava":   0,
+		TerrainCosts: map[uint32]uint32{
+			1: 17,
+			2: 381,
+			3: 10,
 		},
 	}
 
@@ -27,11 +27,14 @@ func BenchmarkCopyUnit(b *testing.B) {
 }
 
 func TestCopyUnitCopiesMovementCosts(t *testing.T) {
+	terrainID := uint32(3)
+	terrainCost := uint32(17)
+
 	u := &awfdata.Unit{
 		AttackModifier: 1,
 		Name:           "Something",
-		TerrainCosts: map[string]uint32{
-			"Forest": 17,
+		TerrainCosts: map[uint32]uint32{
+			terrainID: terrainCost,
 		},
 	}
 
@@ -45,7 +48,7 @@ func TestCopyUnitCopiesMovementCosts(t *testing.T) {
 		t.Fatalf("Expected %d terrain cost modifiers, but got %d", len(u.TerrainCosts), len(copied.TerrainCosts))
 	}
 
-	if val, ok := copied.TerrainCosts["Forest"]; !ok || val != 17 {
-		t.Errorf("Expected Forest to have cost of 17, but got %d", val)
+	if val, ok := copied.TerrainCosts[terrainID]; !ok || val != terrainCost {
+		t.Errorf("Expected terrain ID %d to have cost of %d, but got %d", terrainID, terrainCost, val)
 	}
 }

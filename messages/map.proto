@@ -10,10 +10,12 @@ message Map {
     uint32 height = 2;
 
     message Tile {
-        Terrain terrain = 1;
+        uint32 terrainId = 1;
         Unit unit = 2;
     }
 
     // To access <X,Y>, access [Y*width + X]
     repeated Tile tiles = 3;
+
+    map<uint32, Terrain> terrain = 4;
 }

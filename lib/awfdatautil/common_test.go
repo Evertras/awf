@@ -13,13 +13,17 @@ func generateSampleOpenMap() *awfdata.Map {
 		Width:  uint32(sampleWidth),
 		Height: uint32(sampleHeight),
 		Tiles:  make([]*awfdata.Map_Tile, sampleTotalTiles),
+		Terrain: map[uint32]*awfdata.Terrain{
+			1: &awfdata.Terrain{
+				Name: "Open",
+				Id:   1,
+			},
+		},
 	}
 
 	for i := uint32(0); i < sampleTotalTiles; i++ {
 		m.Tiles[i] = &awfdata.Map_Tile{
-			Terrain: &awfdata.Terrain{
-				Name: "Open",
-			},
+			TerrainId: 1,
 		}
 	}
 

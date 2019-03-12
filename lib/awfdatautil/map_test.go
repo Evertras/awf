@@ -11,19 +11,19 @@ func TestMapTileAt(t *testing.T) {
 	m := generateSampleOpenMap()
 
 	for i := uint32(0); i < sampleTotalTiles; i++ {
-		m.Tiles[i].Terrain.Name = fmt.Sprintf("Test%d%d", i%sampleWidth, i/sampleWidth)
+		m.Tiles[i].TerrainId = i%sampleWidth*1000 + i/sampleWidth
 	}
 
 	for x := uint32(0); x < sampleWidth; x++ {
 		for y := uint32(0); y < sampleHeight; y++ {
-			expectedName := fmt.Sprintf("Test%d%d", x, y)
+			expectedID := x*1000 + y
 			tile := MapTileAt(m, &awfdata.Point{
 				X: x,
 				Y: y,
 			})
 
-			if tile.Terrain.Name != expectedName {
-				t.Errorf("Expected name %q but got %q", expectedName, tile.Terrain.Name)
+			if tile.TerrainId != expectedID {
+				t.Errorf("Expected id %d but got %d", expectedID, tile.TerrainId)
 			}
 		}
 	}
@@ -90,9 +90,9 @@ func TestPotentialMovementTerrainCosts(t *testing.T) {
 
 	origin := MapTileAt(m, center)
 
-	terrainCosts := make(map[string]uint32)
+	terrainCosts := make(map[uint32]uint32)
 
-	terrainCosts[m.Tiles[0].Terrain.Name] = 3
+	terrainCosts[m.Tiles[0].TerrainId] = 3
 
 	origin.Unit = &awfdata.Unit{
 		Name:         "SampleMover",

@@ -44,7 +44,7 @@ func PotentialMoves(m *awfdata.Map, p *awfdata.Point) []*awfdata.Point {
 		// Special case: if this is the first square, ignore it
 		if p == last {
 			cost = 0
-		} else if cost, ok = source.Unit.TerrainCosts[tile.Terrain.Name]; !ok {
+		} else if cost, ok = source.Unit.TerrainCosts[tile.TerrainId]; !ok {
 			cost = 1
 		}
 

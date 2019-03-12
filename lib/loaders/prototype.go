@@ -16,15 +16,22 @@ func PrototypeMap() *awfdata.Map {
 		Width:  width,
 		Height: height,
 		Tiles:  make([]*awfdata.Map_Tile, totalTiles),
+		Terrain: map[uint32]*awfdata.Terrain{
+			1: &awfdata.Terrain{
+				Name: "Prototype Open",
+				Id:   1,
+			},
+			2: &awfdata.Terrain{
+				Name:      "Prototype Objective",
+				Id:        2,
+				Objective: true,
+			},
+		},
 	}
 
 	for i := 0; i < int(totalTiles); i++ {
-		// Intentionally giving it a weird name to make sure we're not hardcoding anything elsewhere
 		m.Tiles[i] = &awfdata.Map_Tile{
-			Terrain: &awfdata.Terrain{
-				Name: "PrototypeOpen",
-				Id:   1,
-			},
+			TerrainId: 1,
 		}
 	}
 
@@ -35,10 +42,7 @@ func PrototypeMap() *awfdata.Map {
 	}
 
 	for _, tile := range objTiles {
-		// Intentionally giving it a weird name to make sure we're not hardcoding anything elsewhere
-		tile.Terrain.Name = "PrototypeObjective"
-		tile.Terrain.Id = 2
-		tile.Terrain.Objective = true
+		tile.TerrainId = 2
 	}
 
 	return m
@@ -61,8 +65,8 @@ func PrototypeFaction() *awfdata.Faction {
 			Strength:       3,
 			AttackModifier: 4,
 			Vision:         2,
-			TerrainCosts: map[string]uint32{
-				"PrototypeObjective": 2,
+			TerrainCosts: map[uint32]uint32{
+				2: 2,
 			},
 		},
 	}
