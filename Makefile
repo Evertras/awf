@@ -66,6 +66,8 @@ messages/tsmessage: node_modules messages/*.proto
 front/lib.wasm: $(WASM_FILES) cmd/wasm/main.go
 	GOARCH=wasm GOOS=js go build -o front/lib.wasm cmd/wasm/main.go
 
+# These are a bit special for now... we don't want to make Texture Packer a raw dependency for anyone
+# except for those editing the art, so don't erase these on clean.
 front/assets/terrain.png front/assets/terrain.json: front/assets/raw/terrain/*
 	$(TEXTURE_PACKER) --format pixijs4 \
 	                  --sheet front/assets/terrain.png \
