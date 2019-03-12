@@ -12,7 +12,6 @@ export function loadWASM(cb: (err?: Error) => void) {
     const go = new Go();
     // let mod: any;
     let inst: any;
-    console.log(go.importObject);
     WebAssembly.instantiateStreaming(fetch('lib.wasm'), go.importObject).then((result: any) => {
         // mod = result.module;
         inst = result.instance;

@@ -3,6 +3,8 @@
 package wasm
 
 import (
+	"github.com/Evertras/awf/lib/awfdata"
+	"github.com/Evertras/awf/lib/awfdatautil"
 	"github.com/Evertras/awf/lib/loaders"
 
 	"syscall/js"
@@ -18,6 +20,8 @@ func RegisterCallbacks() {
 
 	base.Set("sayHello", js.NewCallback(sayHello))
 	base.Set("initPrototype", js.NewCallback(initPrototype))
+	base.Set("getPotentialMoves", js.NewCallback(getPotentialMoves))
+	base.Set("getPotentialMovesBenchmark", js.NewCallback(getPotentialMovesBenchmark))
 
 	base.Set("ready", true)
 }
@@ -40,4 +44,43 @@ func initPrototype(args []js.Value) {
 	}
 
 	cb.Invoke()
+}
+
+func getPotentialMoves(args []js.Value) {
+	x := args[0].Int()
+	y := args[1].Int()
+
+	if x < 0 || x >= int(inst.game.Map.Width) || y < 0 || y >= int(inst.game.Map.Height) {
+		args[2].Invoke("Out of map bounds")
+		return
+	}
+
+	potentialMoves := awfdatautil.PotentialMoves(inst.game.Map, &awfdata.Point{X: uint32(x), Y: uint32(y)})
+
+	ret := make([]interface{}, len(potentialMoves))
+
+	for i, move := range potentialMoves {
+		obj := make(map[string]interface{})
+
+		obj["x"] = move.X
+		obj["y"] = move.Y
+
+		ret[i] = obj
+	}
+
+	args[2].Invoke(js.Undefined(), ret)
+}
+
+func getPotentialMovesBenchmark(args []js.Value) {
+	x := args[0].Int()
+	y := args[1].Int()
+
+	if x < 0 || x >= int(inst.game.Map.Width) || y < 0 || y >= int(inst.game.Map.Height) {
+		args[2].Invoke("Out of map bounds")
+		return
+	}
+
+	awfdatautil.PotentialMoves(inst.game.Map, &awfdata.Point{X: uint32(x), Y: uint32(y)})
+
+	args[2].Invoke(js.Undefined())
 }
