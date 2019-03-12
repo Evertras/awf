@@ -1,6 +1,9 @@
+import { loadAssets, textureGrass } from './assets';
+import { loadWASM } from './wasmloader';
+
 console.log('Hello Typescript World!');
 
-let app = new PIXI.Application({
+const app = new PIXI.Application({
     autoResize: true,
 });
 
@@ -18,3 +21,26 @@ resize();
 
 // Listen for window resize events
 window.addEventListener('resize', resize);
+
+let remaining = 2;
+
+function ready() {
+    if (--remaining === 0) {
+        console.log('Everything loaded');
+    }
+}
+
+loadAssets(() => {
+    const texGrass = textureGrass();
+    app.stage.addChild(new PIXI.Sprite(texGrass));
+
+    ready();
+});
+
+loadWASM((err) => {
+    if (err) {
+        return console.error(err);
+    }
+
+    ready();
+});
