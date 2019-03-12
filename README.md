@@ -62,7 +62,8 @@ To verify, should see "Hello World" in console when loading page via server.
 
 ### 0.4.0 - Front End Basic
 
-* [ ] A level is loaded and visible with distinguishable terrain
-* [ ] A few units are loaded and visible on some tiles
-* [ ] The player can click the unit and see potential destinations, then click again to move the unit there
+* [ ] A level is loaded via WASM call
+* [ ] The level is visible on screen with distinguishable terrain tiles
+* [ ] A few units are loaded via WASM call and visible on some tiles
+* [ ] The player can click the unit and see potential destinations, then click again to move the unit there (via WASM)
 * [ ] The player can hit 'end turn' to start a new turn (no opponents yet)

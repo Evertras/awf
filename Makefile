@@ -1,5 +1,6 @@
 BINARY_NAME=awf
 TS_FILES=$(shell find front/src -name "*.ts")
+WASM_FILES=$(shell find lib -name "*.go" ! -path "lib/static/*")
 GO_PROTO_BUILD_DIR=lib/awfdata
 TEXTURE_PACKER=TexturePacker
 
@@ -62,7 +63,7 @@ messages/tsmessage: node_modules messages/*.proto
 	npx pbjs -t static-module -w commonjs messages/*.proto > messages/tsmessage/messages.js || (rm -rf messages/tsmessage && exit 1)
 	npx pbts -o messages/tsmessage/messages.d.ts messages/tsmessage/messages.js || (rm -rf messages/tsmessage && exit 1)
 
-front/lib.wasm:
+front/lib.wasm: $(WASM_FILES) cmd/wasm/main.go
 	GOARCH=wasm GOOS=js go build -o front/lib.wasm cmd/wasm/main.go
 
 front/assets/terrain.png front/assets/terrain.json: front/assets/raw/terrain/*

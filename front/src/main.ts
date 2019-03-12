@@ -27,6 +27,8 @@ let remaining = 2;
 function ready() {
     if (--remaining === 0) {
         console.log('Everything loaded');
+
+        gowasm.sayHello();
     }
 }
 
