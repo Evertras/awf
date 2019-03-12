@@ -1,6 +1,6 @@
 BINARY_NAME=awf
 TS_FILES=$(shell find front/src -name "*.ts")
-WASM_FILES=$(shell find lib -name "*.go" ! -path "lib/static/*" ! -path "lib/server/*")
+WASM_FILES=$(shell find lib -name "*.go" ! -path "lib/static/*" ! -path "lib/server/*" ! -name "*_test.go")
 GO_PROTO_BUILD_DIR=lib/awfdata
 TEXTURE_PACKER=TexturePacker
 
