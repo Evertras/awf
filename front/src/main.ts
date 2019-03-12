@@ -1,3 +1,4 @@
+import { awfdata } from '../../messages/tsmessage/messages';
 import { loadAssets, textureGrass } from './assets';
 import { loadWASM } from './wasmloader';
 
@@ -36,6 +37,16 @@ function ready() {
             }
 
             console.log('Successfully loaded a prototype game');
+
+            const cb = (errState: string | undefined, state: Uint8Array) => {
+                if (errState) {
+                    return console.error(errState);
+                }
+
+                awfdata.Game.decode(state);
+            };
+
+            gowasm.getGameState(cb);
         });
     }
 }

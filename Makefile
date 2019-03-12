@@ -29,7 +29,7 @@ build-wasm:
 bench:
 	go test -v -benchmem -bench . ./lib/...
 
-run-dev: front/game.js lib/static/build.go
+run-dev:
 	go run -race ./cmd/server/main.go -d
 
 docker: clean build

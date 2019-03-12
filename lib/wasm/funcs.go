@@ -6,6 +6,7 @@ import (
 	"github.com/Evertras/awf/lib/awfdata"
 	"github.com/Evertras/awf/lib/awfdatautil"
 	"github.com/Evertras/awf/lib/loaders"
+	"github.com/golang/protobuf/proto"
 
 	"syscall/js"
 )
@@ -21,7 +22,7 @@ func RegisterCallbacks() {
 	base.Set("sayHello", js.NewCallback(sayHello))
 	base.Set("initPrototype", js.NewCallback(initPrototype))
 	base.Set("getPotentialMoves", js.NewCallback(getPotentialMoves))
-	base.Set("getPotentialMovesBenchmark", js.NewCallback(getPotentialMovesBenchmark))
+	base.Set("getGameState", js.NewCallback(getGameState))
 
 	base.Set("ready", true)
 }
@@ -47,11 +48,11 @@ func initPrototype(args []js.Value) {
 }
 
 func getPotentialMoves(args []js.Value) {
-	x := args[0].Int()
-	y := args[1].Int()
+	x := args[1].Int()
+	y := args[2].Int()
 
 	if x < 0 || x >= int(inst.game.Map.Width) || y < 0 || y >= int(inst.game.Map.Height) {
-		args[2].Invoke("Out of map bounds")
+		args[0].Invoke("Out of map bounds")
 		return
 	}
 
@@ -68,19 +69,18 @@ func getPotentialMoves(args []js.Value) {
 		ret[i] = obj
 	}
 
-	args[2].Invoke(js.Undefined(), ret)
+	args[0].Invoke(js.Undefined(), ret)
 }
 
-func getPotentialMovesBenchmark(args []js.Value) {
-	x := args[0].Int()
-	y := args[1].Int()
+func getGameState(args []js.Value) {
+	data, err := proto.Marshal(inst.game)
 
-	if x < 0 || x >= int(inst.game.Map.Width) || y < 0 || y >= int(inst.game.Map.Height) {
-		args[2].Invoke("Out of map bounds")
-		return
+	if err != nil {
+		args[0].Invoke(err.Error())
 	}
 
-	awfdatautil.PotentialMoves(inst.game.Map, &awfdata.Point{X: uint32(x), Y: uint32(y)})
+	arr := js.TypedArrayOf([]uint8(data))
+	defer arr.Release()
 
-	args[2].Invoke(js.Undefined())
+	args[0].Invoke(js.Undefined(), arr)
 }
