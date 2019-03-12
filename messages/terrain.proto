@@ -4,6 +4,7 @@ package awfdata;
 
 message Terrain {
     string name = 1;
+    uint32 id = 6;
 
     // Attributes
     bool water = 2;

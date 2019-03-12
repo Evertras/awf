@@ -3,15 +3,19 @@
 terrain:
 
   - name: Open
+    id: 1
 
   - name: Forest
+    id: 2
     concealing: true
     defense_modifier: 1
 
   - name: Water
+    id: 3
     water: true
 
   - name: Objective
+    id: 4
     objective: true
     defense_modifier: 1
 

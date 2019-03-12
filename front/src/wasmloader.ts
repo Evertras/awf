@@ -27,7 +27,7 @@ export function loadWASM(cb: (err?: Error) => void) {
             cb();
         };
 
-        setTimeout(waitForReady, 100);
+        setTimeout(waitForReady, 10);
     }).catch((err: Error) => {
         cb(err);
     });

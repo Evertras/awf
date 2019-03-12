@@ -23,6 +23,7 @@ func PrototypeMap() *awfdata.Map {
 		m.Tiles[i] = &awfdata.Map_Tile{
 			Terrain: &awfdata.Terrain{
 				Name: "PrototypeOpen",
+				Id:   1,
 			},
 		}
 	}
@@ -36,6 +37,7 @@ func PrototypeMap() *awfdata.Map {
 	for _, tile := range objTiles {
 		// Intentionally giving it a weird name to make sure we're not hardcoding anything elsewhere
 		tile.Terrain.Name = "PrototypeObjective"
+		tile.Terrain.Id = 2
 		tile.Terrain.Objective = true
 	}
 
