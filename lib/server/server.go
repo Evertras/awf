@@ -38,6 +38,8 @@ func (s *Server) Listen(addr string) error {
 		mux.Handle("/", http.FileServer(http.Dir("front")))
 		log.Println("Reading files from disk for every request, ONLY USE THIS FOR DEV MODE!")
 	} else {
+		static.Load()
+
 		mux.HandleFunc("/assets/*", func(w http.ResponseWriter, req *http.Request) {
 			w.WriteHeader(404)
 		})
@@ -48,10 +50,10 @@ func (s *Server) Listen(addr string) error {
 				file = "index.html"
 			}
 
-			if data, ok := static.StaticGzipFileData[file]; ok {
+			if data, ok := static.Files[file]; ok {
 				w.Header().Set("Content-Type", data.Mime)
 				w.Header().Set("Content-Encoding", "gzip")
-				w.Write(data.Data)
+				w.Write(data.GzipData)
 			} else {
 				w.WriteHeader(404)
 			}

@@ -15,19 +15,18 @@ all: test build
 
 clean:
 	rm -f $(BINARY_NAME)
-	rm -f lib/static/build.go
 	rm -f front/game.js
 	rm -f front/game.js.map
 	rm -f front/lib.wasm
 	rm -rf $(GO_PROTO_BUILD_DIR)
 	rm -rf messages/tsmessage
 
-test: node_modules protos lib/static/build.go
+test: node_modules protos
 	npx tslint -p .
 	npm test
 	go test -v ./lib/...
 
-build: protos lib/static/build.go
+build: protos
 	CG_ENABLED=0 go build -o $(BINARY_NAME) -v ./cmd/server/main.go
 
 build-wasm: 
@@ -50,20 +49,6 @@ protos: $(GO_PROTO_BUILD_DIR) messages/tsmessage
 # Actual files/directories that must be generated
 front/game.js: node_modules messages/tsmessage $(TS_FILES)
 	npx webpack || (rm -f front/game.js && exit 1)
-
-lib/static/build.go: \
-		front/lib.wasm \
-		front/game.js \
-		front/index.html \
-		front/style.css \
-		front/favicon.ico \
-		front/lib/* \
-		lib/static/generate.go \
-		front/assets/terrain.png \
-		front/assets/terrain.json \
-		front/assets/ui.png \
-		front/assets/ui.json
-	go generate ./lib/static/
 
 node_modules:
 	npm install
