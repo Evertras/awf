@@ -80,6 +80,8 @@ func main() {
 	// Assets
 	register("assets/terrain.png", "image/png")
 	register("assets/terrain.json", "application/json")
+	register("assets/ui.png", "image/png")
+	register("assets/ui.json", "application/json")
 
 	f, err := os.Create("build.go")
 

@@ -1,5 +1,5 @@
 import { awfdata } from '../../messages/tsmessage/messages';
-import { loadAssets, textureGrass, textureObjectiveNeutral, tileSize } from './assets';
+import { loadAssets, textureTerrainGrass, textureTerrainObjectiveNeutral, tileSize } from './assets';
 import { loadWASM } from './wasmloader';
 
 console.log('Hello Typescript World!');
@@ -54,11 +54,11 @@ function ready() {
 
                             switch (map.tiles[y * map.width + x].terrainId) {
                                 case 2:
-                                    tex = textureObjectiveNeutral();
+                                    tex = textureTerrainObjectiveNeutral();
                                     break;
 
                                 default:
-                                tex = textureGrass();
+                                tex = textureTerrainGrass();
                             }
 
                             const tile = new PIXI.Sprite(tex);

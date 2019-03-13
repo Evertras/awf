@@ -1,0 +1,20 @@
+{"frames": {
+
+"square_move.png":
+{
+	"frame": {"x":0,"y":0,"w":40,"h":40},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":40,"h":40},
+	"sourceSize": {"w":40,"h":40}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "ui.png",
+	"format": "RGBA8888",
+	"size": {"w":40,"h":40},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:336ba25bb99b724ea41e731f57d288a1:c4c6865f2a570678fb8d3234896852eb:5b04aa198265472a3c5f56958d78e97b$"
+}
+}

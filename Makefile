@@ -2,7 +2,14 @@ BINARY_NAME=awf
 TS_FILES=$(shell find front/src -name "*.ts")
 WASM_FILES=$(shell find lib -name "*.go" ! -path "lib/static/*" ! -path "lib/server/*" ! -name "*_test.go")
 GO_PROTO_BUILD_DIR=lib/awfdata
-TEXTURE_PACKER=TexturePacker
+TEXTURE_PACKER=TexturePacker \
+                  --format pixijs4 \
+                  --algorithm Basic \
+                  --extrude 0 \
+                  --trim-mode None \
+                  --png-opt-level 0 \
+                  --disable-auto-alias \
+                  --shape-padding 2
 
 all: test build
 
@@ -44,7 +51,18 @@ protos: $(GO_PROTO_BUILD_DIR) messages/tsmessage
 front/game.js: node_modules messages/tsmessage $(TS_FILES)
 	npx webpack || (rm -f front/game.js && exit 1)
 
-lib/static/build.go: front/lib.wasm front/game.js front/index.html front/style.css front/favicon.ico front/lib/* lib/static/generate.go front/assets/terrain.png front/assets/terrain.json
+lib/static/build.go: \
+		front/lib.wasm \
+		front/game.js \
+		front/index.html \
+		front/style.css \
+		front/favicon.ico \
+		front/lib/* \
+		lib/static/generate.go \
+		front/assets/terrain.png \
+		front/assets/terrain.json \
+		front/assets/ui.png \
+		front/assets/ui.json
 	go generate ./lib/static/
 
 node_modules:
@@ -66,16 +84,16 @@ messages/tsmessage: node_modules messages/*.proto
 front/lib.wasm: $(WASM_FILES) cmd/wasm/main.go
 	GOARCH=wasm GOOS=js go build -o front/lib.wasm cmd/wasm/main.go
 
-# These are a bit special for now... we don't want to make Texture Packer a raw dependency for anyone
-# except for those editing the art, so don't erase these on clean.
+# These are a bit special for now... we don't want to make Texture Packer a hard dependency for anyone
+# except for those editing the art, so don't erase these on clean and keep them out of gitignore!
 front/assets/terrain.png front/assets/terrain.json: front/assets/raw/terrain/*
-	$(TEXTURE_PACKER) --format pixijs4 \
-	                  --sheet front/assets/terrain.png \
-	                  --data front/assets/terrain.json \
-	                  --algorithm Basic \
-	                  --extrude 0 \
-	                  --trim-mode None \
-	                  --png-opt-level 0 \
-	                  --disable-auto-alias \
-	                  --shape-padding 2 \
-	                  front/assets/raw/terrain
+	$(TEXTURE_PACKER) \
+	    --sheet front/assets/terrain.png \
+	    --data front/assets/terrain.json \
+	    front/assets/raw/terrain
+
+front/assets/ui.png front/assets/ui.json: front/assets/raw/ui/*
+	$(TEXTURE_PACKER) \
+	    --sheet front/assets/ui.png \
+	    --data front/assets/ui.json \
+	    front/assets/raw/ui
