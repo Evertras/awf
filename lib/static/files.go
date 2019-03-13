@@ -13,7 +13,7 @@ type FileData struct {
 }
 
 // Files contains all known files long with their mime types
-var Files map[string]FileData = make(map[string]FileData)
+var Files = make(map[string]FileData)
 
 func readRaw(filename string) []byte {
 	raw, err := ioutil.ReadFile("front/" + filename)
