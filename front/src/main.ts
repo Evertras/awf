@@ -1,5 +1,6 @@
 import { awfdata } from '../../messages/tsmessage/messages';
-import { loadAssets, textureTerrainGrass, textureTerrainObjectiveNeutral, tileSize } from './assets';
+import { loadAssets } from './assets';
+import { Game } from './visuals/game';
 import { loadWASM } from './wasmloader';
 
 console.log('Hello Typescript World!');
@@ -44,32 +45,10 @@ function ready() {
                 }
 
                 const state = awfdata.Game.decode(raw);
-                const map = state.map;
 
-                // This is a little ridiculous, but protobuf makes it necessary...
-                if (map && map.width && map.height && map.tiles && map.terrain) {
-                    for (let x = 0; x < map.width; x++) {
-                        for (let y = 0; y < map.height; y++) {
-                            let tex: PIXI.Texture;
+                const gameVisual = new Game(state);
 
-                            switch (map.tiles[y * map.width + x].terrainId) {
-                                case 2:
-                                    tex = textureTerrainObjectiveNeutral();
-                                    break;
-
-                                default:
-                                tex = textureTerrainGrass();
-                            }
-
-                            const tile = new PIXI.Sprite(tex);
-
-                            tile.x = tileSize * x;
-                            tile.y = tileSize * y;
-
-                            app.stage.addChild(tile);
-                        }
-                    }
-                }
+                app.stage.addChild(gameVisual);
            };
 
             gowasm.getGameState(cb);
