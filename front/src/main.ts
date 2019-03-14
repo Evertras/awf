@@ -1,6 +1,6 @@
 import { awfdata } from '../../messages/tsmessage/messages';
 import { loadAssets } from './assets';
-import { Game } from './visuals/game';
+import { Game } from './game';
 import { loadWASM } from './wasmloader';
 
 console.log('Hello Typescript World!');
@@ -13,6 +13,8 @@ document.body.appendChild(app.view);
 
 app.renderer.view.style.position = 'absolute';
 app.renderer.view.style.display = 'block';
+
+app.start();
 
 function resize(): void {
     // Resize the renderer
@@ -57,7 +59,6 @@ function ready() {
 }
 
 loadAssets(() => {
-
     ready();
 });
 

@@ -1,7 +1,7 @@
 import { awfdata } from '../../../messages/tsmessage/messages';
 import { textureTerrainGrass, textureTerrainObjectiveNeutral, tileSize } from '../assets';
 
-export class GameMap extends PIXI.Sprite {
+export class GameMap extends PIXI.Container {
     constructor(map: awfdata.IMap) {
         super();
 
@@ -25,8 +25,6 @@ export class GameMap extends PIXI.Sprite {
 
                 const tile = new PIXI.Sprite(tex);
 
-                tile.anchor.x = 0.5;
-                tile.anchor.y = 0.5;
                 tile.x = tileSize * x;
                 tile.y = tileSize * y;
 

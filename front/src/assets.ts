@@ -8,6 +8,7 @@ let texturesTerrain: PIXI.loaders.TextureDictionary | undefined;
 let texturesUI: PIXI.loaders.TextureDictionary | undefined;
 
 export const tileSize = 64;
+export const tileCenterOffset = tileSize / 2;
 
 export function loadAssets(cb: CallableFunction) {
     PIXI.loader

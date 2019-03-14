@@ -1,6 +1,6 @@
-import { textureSquareMove, tileSize } from '../assets';
+import { textureSquareMove, tileCenterOffset, tileSize } from '../assets';
 
-export class MovementOverlay extends PIXI.Sprite {
+export class MovementOverlay extends PIXI.Container {
     private overlays: Array<PIXI.Sprite | null>;
     private mapWidth: number;
     private mapHeight: number;
@@ -21,7 +21,6 @@ export class MovementOverlay extends PIXI.Sprite {
             const s = this.overlays[i];
 
             if (s) {
-                s.destroy(true);
                 this.overlays[i] = null;
             }
         }
@@ -36,8 +35,8 @@ export class MovementOverlay extends PIXI.Sprite {
         } else {
             const s = new PIXI.Sprite(textureSquareMove());
 
-            s.x = x * tileSize;
-            s.y = y * tileSize;
+            s.x = x * tileSize + tileCenterOffset;
+            s.y = y * tileSize + tileCenterOffset;
             s.anchor.x = 0.5;
             s.anchor.y = 0.5;
 
