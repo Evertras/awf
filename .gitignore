@@ -16,7 +16,7 @@ awf-server
 front/lib.wasm
 
 # Protobuf compilation
-messages/*message/
+front/src/proto
 lib/awfdata
 
 # Output of generate
