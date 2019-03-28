@@ -1,6 +1,6 @@
-import { awfdata } from '../../messages/tsmessage/messages';
 import { loadAssets } from './assets';
 import { Game } from './game';
+import { awfdata } from './proto/messages';
 import { loadWASM } from './wasmloader';
 
 console.log('Hello Typescript World!');

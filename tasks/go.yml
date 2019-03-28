@@ -1,0 +1,54 @@
+version: '2'
+
+vars:
+  GO_PROTO_BUILD_DIR: lib/awfdata
+
+tasks:
+  clean:
+    cmds:
+      - rm -rf {{.GO_PROTO_BUILD_DIR}}
+      - rm -f awf-server
+      - rm -f front/lib.wasm
+      - rm -rf .task
+
+  proto:
+    sources:
+      - messages/**/*.proto
+    method: checksum
+    cmds:
+      - rm -rf {{.GO_PROTO_BUILD_DIR}}
+      - mkdir {{.GO_PROTO_BUILD_DIR}}
+      - docker run -v ${PWD}:/defs namely/protoc-all -d messages -l go -o {{.GO_PROTO_BUILD_DIR}} || (rm -rf {{.GO_PROTO_BUILD_DIR}} && exit 1)
+
+  build:
+    cmds:
+      - task: build-server
+      - task: build-wasm
+
+  build-server:
+    deps: [ proto ]
+    sources:
+      - lib/**/*.go
+    generates:
+      - awf-server
+    env:
+      CGO_ENABLED: 0
+    cmds:
+      - go build -o awf-server -v ./cmd/server/main.go
+
+  build-wasm:
+    deps: [ proto ]
+    sources:
+      - lib/**/*.go
+    generates:
+      - front/lib.wasm
+    env:
+      GOARCH: wasm 
+      GOOS: js 
+    cmds:
+      - go build -o front/lib.wasm cmd/wasm/main.go
+  
+  test:
+    deps: [ proto ]
+    cmds:
+      - go test -v ./lib/...

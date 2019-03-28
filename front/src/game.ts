@@ -1,6 +1,6 @@
-import { awfdata } from '../../messages/tsmessage/messages';
 import { tileSize } from './assets';
 import { MapLocation } from './mapLocation';
+import { awfdata } from './proto/messages';
 import { GameMap } from './visuals/map';
 import { MovementOverlay } from './visuals/movementOverlay';
 

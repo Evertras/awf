@@ -1,5 +1,5 @@
-import { awfdata } from '../../../messages/tsmessage/messages';
 import { textureTerrainGrass, textureTerrainObjectiveNeutral, tileSize } from '../assets';
+import { awfdata } from '../proto/messages';
 
 export class GameMap extends PIXI.Container {
     constructor(map: awfdata.IMap) {

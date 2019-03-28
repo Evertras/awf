@@ -51,7 +51,7 @@ func register(filename, mime string) {
 	}
 }
 
-// Load loads all the files we care about to make them accessible through Files
+// Load loads and compresses all the files we care about to make them accessible through Files
 func Load() {
 	// Included JS
 	register("lib/wasm_exec.js", "application/javascript")

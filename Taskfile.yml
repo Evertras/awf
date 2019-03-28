@@ -1,0 +1,18 @@
+version: '2'
+
+output: group
+
+includes:
+  js: tasks/js.yml
+  go: tasks/go.yml
+  assets: tasks/assets.yml
+
+tasks:
+  clean:
+    deps: [ js:clean, go:clean ]
+
+  build:
+    deps: [ js:build, go:build ]
+
+  test:
+    deps: [ js:test, go:test ]

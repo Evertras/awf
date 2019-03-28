@@ -1,0 +1,29 @@
+version: '2'
+
+vars:
+  TEXTURES: ui terrain
+
+tasks:
+  pack:
+    sources:
+      - front/assets/*.json
+      - front/assets/raw/**/*
+    generates:
+      - front/assets/*.png
+    cmds:
+      - silent: true
+        cmd: |
+          for TEX in {{.TEXTURES}}; do
+            echo Building ${TEX}
+            TexturePacker \
+              --format pixijs4 \
+              --algorithm Basic \
+              --extrude 0 \
+              --trim-mode None \
+              --png-opt-level 0 \
+              --disable-auto-alias \
+              --shape-padding 2 \
+              --sheet front/assets/${TEX}.png \
+              --data front/assets/${TEX}.json \
+              front/assets/raw/${TEX}
+          done

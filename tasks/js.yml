@@ -1,0 +1,46 @@
+version: '2'
+
+tasks:
+  clean:
+    cmds:
+      - rm -f front/game.js
+      - rm -f front/game.js.map
+      - rm -rf front/src/proto
+
+  npm:
+    sources:
+      - package.json
+    generates:
+      - node_modules
+    method: checksum
+    cmds:
+      - npm install
+
+  proto:
+    deps: [ npm ]
+    sources:
+      - messages/**/*.proto
+    generates:
+      - front/src/proto/**/*.ts
+    method: checksum
+    cmds:
+      - rm -rf front/src/proto/
+      - mkdir front/src/proto/
+      - npx pbjs -t static-module -w commonjs messages/*.proto > front/src/proto/messages.js
+      - npx pbts -o front/src/proto/messages.d.ts front/src/proto/messages.js
+
+  build:
+    deps: [ proto ]
+    sources:
+      - ./front/src/**/*.ts
+    generates:
+      - front/game.js
+      - front/game.js.map
+    cmds:
+      - npx webpack
+
+  test:
+    deps: [ proto ]
+    cmds:
+      - npx tslint -p .
+      - npm test
