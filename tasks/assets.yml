@@ -5,25 +5,38 @@ vars:
 
 tasks:
   pack:
+    deps:
+      - task: pack-spritesheet
+        vars:
+          NAME: ui
+          PATH: ui
+      - task: pack-spritesheet
+        vars:
+          NAME: terrain
+          PATH: terrain
+      - task: pack-spritesheet
+        vars:
+          NAME: units
+          PATH: units
+
+  pack-spritesheet:
     sources:
-      - front/assets/*.json
-      - front/assets/raw/**/*
+      - front/assets/raw/{{.PATH}}/*
     generates:
-      - front/assets/*.png
+      - front/assets/{{.NAME}}.png
+      - front/assets/{{.NAME}}.json
     cmds:
       - silent: true
         cmd: |
-          for TEX in {{.TEXTURES}}; do
-            echo Building ${TEX}
-            TexturePacker \
-              --format pixijs4 \
-              --algorithm Basic \
-              --extrude 0 \
-              --trim-mode None \
-              --png-opt-level 0 \
-              --disable-auto-alias \
-              --shape-padding 2 \
-              --sheet front/assets/${TEX}.png \
-              --data front/assets/${TEX}.json \
-              front/assets/raw/${TEX}
-          done
+          echo Building {{.NAME}}
+          TexturePacker \
+            --format pixijs4 \
+            --algorithm Basic \
+            --extrude 0 \
+            --trim-mode None \
+            --png-opt-level 0 \
+            --disable-auto-alias \
+            --shape-padding 2 \
+            --sheet front/assets/{{.NAME}}.png \
+            --data front/assets/{{.NAME}}.json \
+            front/assets/raw/{{.PATH}}
