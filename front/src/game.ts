@@ -1,12 +1,12 @@
 import { tileSize } from './assets';
 import { MapLocation } from './mapLocation';
 import { awfdata } from './proto/messages';
-import { GameMap } from './visuals/map';
+import { Map } from './visuals/map';
 import { MovementOverlay } from './visuals/movementOverlay';
 import { Unit } from './visuals/unit';
 
 export class Game extends PIXI.Container {
-    private map: GameMap;
+    private map: Map;
     private moveOverlay: MovementOverlay;
     private units: Unit[] = [];
 
@@ -19,13 +19,9 @@ export class Game extends PIXI.Container {
             throw new Error('Game map not defined');
         }
 
-        this.map = new GameMap(g.map);
+        this.map = new Map(g.map);
 
-        if (!this.map.width || !this.map.height) {
-            throw new Error('Game map is missing dimensions');
-        }
-
-        this.addChild(this.map);
+        this.addChild(this.map.layer);
 
         for (let x = 0; x < g.map.width; ++x) {
             for (let y = 0; y < g.map.height; ++y) {

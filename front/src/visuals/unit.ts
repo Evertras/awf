@@ -11,7 +11,7 @@ export class Unit extends PIXI.Container {
         this.unit = unit;
         this.sprite = new PIXI.extras.AnimatedSprite(animationUnit(UnitType.SkeletonWarrior, UnitAnimation.Idle), true);
 
-        this.sprite.anchor.set(0.5, 0.5);
+        this.sprite.anchor.set(0.5, 0.6);
         this.sprite.scale.x = this.sprite.scale.y = 2.5;
         this.sprite.animationSpeed = 0.2;
         this.sprite.play();

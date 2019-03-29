@@ -1,14 +1,23 @@
 import { textureTerrainGrass, textureTerrainObjectiveNeutral, tileSize } from '../assets';
 import { awfdata } from '../proto/messages';
 
-export class GameMap extends PIXI.Container {
-    constructor(map: awfdata.IMap) {
-        super();
+export class Map {
+    public data: awfdata.IMap;
+    public layer: PIXI.Container = new PIXI.Container();
 
+    public height: number;
+    public width: number;
+
+    constructor(map: awfdata.IMap) {
         // Thanks protobuf...
         if (!map || !map.width || !map.height || !map.tiles || !map.terrain) {
             throw new Error('Map is not fully defined');
         }
+
+        this.height = map.height;
+        this.width = map.width;
+
+        this.data = map;
 
         for (let x = 0; x < map.width; ++x) {
             for (let y = 0; y < map.height; ++y) {
@@ -30,7 +39,7 @@ export class GameMap extends PIXI.Container {
 
                 tile.anchor.set(0.5, 0.5);
 
-                this.addChild(tile);
+                this.layer.addChild(tile);
             }
         }
     }
