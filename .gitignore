@@ -32,3 +32,6 @@ front/game.js.map
 
 # Taskfile checksums
 .task
+
+# Visual Code settings
+.vscode

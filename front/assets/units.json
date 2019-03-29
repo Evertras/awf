@@ -1,0 +1,88 @@
+{"frames": {
+
+"skeleton_warrior-idle-0.png":
+{
+	"frame": {"x":0,"y":0,"w":16,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":24},
+	"sourceSize": {"w":16,"h":24}
+},
+"skeleton_warrior-idle-1.png":
+{
+	"frame": {"x":0,"y":26,"w":16,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":24},
+	"sourceSize": {"w":16,"h":24}
+},
+"skeleton_warrior-idle-2.png":
+{
+	"frame": {"x":0,"y":52,"w":16,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":24},
+	"sourceSize": {"w":16,"h":24}
+},
+"skeleton_warrior-idle-3.png":
+{
+	"frame": {"x":0,"y":78,"w":16,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":24},
+	"sourceSize": {"w":16,"h":24}
+},
+"skeleton_warrior-idle.png":
+{
+	"frame": {"x":0,"y":104,"w":16,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":24},
+	"sourceSize": {"w":16,"h":24}
+},
+"skeleton_warrior-move-0.png":
+{
+	"frame": {"x":0,"y":130,"w":16,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":24},
+	"sourceSize": {"w":16,"h":24}
+},
+"skeleton_warrior-move-1.png":
+{
+	"frame": {"x":0,"y":156,"w":16,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":24},
+	"sourceSize": {"w":16,"h":24}
+},
+"skeleton_warrior-move-2.png":
+{
+	"frame": {"x":0,"y":182,"w":16,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":24},
+	"sourceSize": {"w":16,"h":24}
+},
+"skeleton_warrior-move-3.png":
+{
+	"frame": {"x":0,"y":208,"w":16,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":24},
+	"sourceSize": {"w":16,"h":24}
+}},
+"animations": {
+	"skeleton_warrior-idle": ["skeleton_warrior-idle-0.png","skeleton_warrior-idle-1.png","skeleton_warrior-idle-2.png","skeleton_warrior-idle-3.png"],
+	"skeleton_warrior-move": ["skeleton_warrior-move-0.png","skeleton_warrior-move-1.png","skeleton_warrior-move-2.png","skeleton_warrior-move-3.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "units.png",
+	"format": "RGBA8888",
+	"size": {"w":16,"h":232},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:6b860309fc0246f15ae1a5f3b0fae797:c428295d24fecf3c6f4540133b42ed13:f2a24b8f3894bf9bf01b668fabf88373$"
+}
+}

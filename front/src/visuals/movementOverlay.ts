@@ -1,4 +1,4 @@
-import { textureSquareMove, tileCenterOffset, tileSize } from '../assets';
+import { textureSquareMove, tileSize } from '../assets';
 
 export class MovementOverlay extends PIXI.Container {
     private overlays: Array<PIXI.Sprite | null>;
@@ -35,8 +35,8 @@ export class MovementOverlay extends PIXI.Container {
         } else {
             const s = new PIXI.Sprite(textureSquareMove());
 
-            s.x = x * tileSize + tileCenterOffset;
-            s.y = y * tileSize + tileCenterOffset;
+            s.x = x * tileSize;
+            s.y = y * tileSize;
             s.anchor.x = 0.5;
             s.anchor.y = 0.5;
 

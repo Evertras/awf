@@ -73,4 +73,6 @@ func Load() {
 	register("assets/terrain.json", "application/json")
 	register("assets/ui.png", "image/png")
 	register("assets/ui.json", "application/json")
+	register("assets/units.png", "image/png")
+	register("assets/units.json", "application/json")
 }

@@ -28,6 +28,8 @@ export class GameMap extends PIXI.Container {
                 tile.x = tileSize * x;
                 tile.y = tileSize * y;
 
+                tile.anchor.set(0.5, 0.5);
+
                 this.addChild(tile);
             }
         }

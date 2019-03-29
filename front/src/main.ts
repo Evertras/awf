@@ -5,6 +5,8 @@ import { loadWASM } from './wasmloader';
 
 console.log('Hello Typescript World!');
 
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
 const app = new PIXI.Application({
     autoResize: true,
 });
