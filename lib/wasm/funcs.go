@@ -19,25 +19,26 @@ func RegisterCallbacks() {
 	js.Global().Set("gowasm", map[string]interface{}{})
 	base = js.Global().Get("gowasm")
 
-	base.Set("sayHello", js.ValueOf(sayHello))
-	base.Set("initPrototype", js.ValueOf(initPrototype))
-	base.Set("getPotentialMoves", js.ValueOf(getPotentialMoves))
-	base.Set("getGameState", js.ValueOf(getGameState))
+	base.Set("sayHello", js.FuncOf(sayHello))
+	base.Set("initPrototype", js.FuncOf(initPrototype))
+	base.Set("getPotentialMoves", js.FuncOf(getPotentialMoves))
+	base.Set("getGameState", js.FuncOf(getGameState))
 
 	base.Set("ready", true)
 }
 
-func sayHello(args []js.Value) {
+func sayHello(this js.Value, args []js.Value) interface{} {
 	println("hello from go wasm module")
+	return nil
 }
 
-func initPrototype(args []js.Value) {
+func initPrototype(this js.Value, args []js.Value) interface{} {
 	cb := args[0]
 	g, err := loaders.PrototypeGame()
 
 	if err != nil {
 		cb.Invoke(err.Error())
-		return
+		return nil
 	}
 
 	inst = instance{
@@ -45,15 +46,17 @@ func initPrototype(args []js.Value) {
 	}
 
 	cb.Invoke()
+
+	return nil
 }
 
-func getPotentialMoves(args []js.Value) {
+func getPotentialMoves(this js.Value, args []js.Value) interface{} {
 	x := args[1].Int()
 	y := args[2].Int()
 
 	if x < 0 || x >= int(inst.game.Map.Width) || y < 0 || y >= int(inst.game.Map.Height) {
 		args[0].Invoke("Out of map bounds")
-		return
+		return nil
 	}
 
 	potentialMoves := awfdatautil.PotentialMoves(inst.game.Map, &awfdata.Point{X: uint32(x), Y: uint32(y)})
@@ -70,9 +73,11 @@ func getPotentialMoves(args []js.Value) {
 	}
 
 	args[0].Invoke(js.Undefined(), ret)
+
+	return nil
 }
 
-func getGameState(args []js.Value) {
+func getGameState(this js.Value, args []js.Value) interface{} {
 	data, err := proto.Marshal(inst.game)
 
 	if err != nil {
@@ -83,4 +88,6 @@ func getGameState(args []js.Value) {
 	defer arr.Release()
 
 	args[0].Invoke(js.Undefined(), arr)
+
+	return nil
 }

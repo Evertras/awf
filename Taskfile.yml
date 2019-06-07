@@ -16,3 +16,4 @@ tasks:
 
   test:
     deps: [ js:test, go:test ]
+
