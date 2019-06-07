@@ -33,46 +33,50 @@ func sayHello(this js.Value, args []js.Value) interface{} {
 }
 
 func initPrototype(this js.Value, args []js.Value) interface{} {
-	cb := args[0]
-	g, err := loaders.PrototypeGame()
+	go func() {
+		cb := args[0]
+		g, err := loaders.PrototypeGame()
 
-	if err != nil {
-		cb.Invoke(err.Error())
-		return nil
-	}
+		if err != nil {
+			cb.Invoke(err.Error())
+			return
+		}
 
-	inst = instance{
-		game: g,
-	}
+		inst = instance{
+			game: g,
+		}
 
-	cb.Invoke()
+		cb.Invoke()
+	}()
 
 	return nil
 }
 
 func getPotentialMoves(this js.Value, args []js.Value) interface{} {
-	x := args[1].Int()
-	y := args[2].Int()
+	go func() {
+		x := args[1].Int()
+		y := args[2].Int()
 
-	if x < 0 || x >= int(inst.game.Map.Width) || y < 0 || y >= int(inst.game.Map.Height) {
-		args[0].Invoke("Out of map bounds")
-		return nil
-	}
+		if x < 0 || x >= int(inst.game.Map.Width) || y < 0 || y >= int(inst.game.Map.Height) {
+			args[0].Invoke("Out of map bounds")
+			return
+		}
 
-	potentialMoves := awfdatautil.PotentialMoves(inst.game.Map, &awfdata.Point{X: uint32(x), Y: uint32(y)})
+		potentialMoves := awfdatautil.PotentialMoves(inst.game.Map, &awfdata.Point{X: uint32(x), Y: uint32(y)})
 
-	ret := make([]interface{}, len(potentialMoves))
+		ret := make([]interface{}, len(potentialMoves))
 
-	for i, move := range potentialMoves {
-		obj := make(map[string]interface{})
+		for i, move := range potentialMoves {
+			obj := make(map[string]interface{})
 
-		obj["x"] = move.X
-		obj["y"] = move.Y
+			obj["x"] = move.X
+			obj["y"] = move.Y
 
-		ret[i] = obj
-	}
+			ret[i] = obj
+		}
 
-	args[0].Invoke(js.Undefined(), ret)
+		args[0].Invoke(js.Undefined(), ret)
+	}()
 
 	return nil
 }
