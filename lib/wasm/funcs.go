@@ -19,10 +19,10 @@ func RegisterCallbacks() {
 	js.Global().Set("gowasm", map[string]interface{}{})
 	base = js.Global().Get("gowasm")
 
-	base.Set("sayHello", js.NewCallback(sayHello))
-	base.Set("initPrototype", js.NewCallback(initPrototype))
-	base.Set("getPotentialMoves", js.NewCallback(getPotentialMoves))
-	base.Set("getGameState", js.NewCallback(getGameState))
+	base.Set("sayHello", js.ValueOf(sayHello))
+	base.Set("initPrototype", js.ValueOf(initPrototype))
+	base.Set("getPotentialMoves", js.ValueOf(getPotentialMoves))
+	base.Set("getGameState", js.ValueOf(getGameState))
 
 	base.Set("ready", true)
 }
