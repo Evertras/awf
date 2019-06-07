@@ -1,4 +1,7 @@
 export const wasmImpl = (method: any, requestData: any, callback: any) => {
-	console.log(method, requestData, callback);
+	console.log('DO THE THING');
+	console.log(method);
+	console.log(requestData);
+	console.log(callback);
 }
 
