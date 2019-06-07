@@ -2,6 +2,7 @@ import { loadAssets } from './assets';
 import { Game } from './game';
 import { awfdata } from './proto/messages';
 import { loadWASM } from './wasmloader';
+import { wasmImpl } from './rpc/impl';
 
 console.log('Hello Typescript World!');
 
@@ -68,6 +69,17 @@ loadWASM((err) => {
     if (err) {
         return console.error(err);
     }
+
+	const wasmSvc = awfdata.WasmService.create(wasmImpl, false, false);
+	const helloReq = awfdata.EchoRequest.create({ text: "Testing echo" });
+
+	wasmSvc.sayHello(helloReq, (err: Error | null, res: awfdata.EchoResponse | undefined) => {
+		if (err) {
+			return console.error(err);
+		}
+
+		console.log("Response!", res);
+	});
 
     ready();
 });

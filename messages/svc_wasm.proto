@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package awfdata;
+
+message EchoRequest {
+	string text = 1;
+}
+
+message EchoResponse {
+	string text = 1;
+}
+
+service WasmService {
+	rpc SayHello (EchoRequest) returns (EchoResponse) {}
+}
