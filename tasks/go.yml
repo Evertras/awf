@@ -62,4 +62,5 @@ tasks:
   test:
     deps: [ wasm-service-gen ]
     cmds:
-      - go test -v ./lib/...
+      - "go test -v `go list ./... | grep -v lib/wasm`"
+
