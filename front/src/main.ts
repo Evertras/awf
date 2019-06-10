@@ -65,21 +65,17 @@ loadAssets(() => {
     ready();
 });
 
-loadWASM((err) => {
+loadWASM(async (err) => {
     if (err) {
         return console.error(err);
     }
 
 	const wasmSvc = awfdata.WasmService.create(wasmImpl, false, false);
-	const helloReq = awfdata.EchoRequest.create({ text: "Testing echo" });
+	const helloReq = awfdata.EchoRequest.create({ text: 'Testing echo' });
 
-	wasmSvc.sayHello(helloReq, (err: Error | null, res: awfdata.EchoResponse | undefined) => {
-		if (err) {
-			return console.error(err);
-		}
-
-		console.log("Response!", res);
-	});
+	console.log('Sending RPC call to echo with text: Testing echo');
+	const res = await wasmSvc.sayHello(helloReq);
+	console.log('RPC response:', res);
 
     ready();
 });

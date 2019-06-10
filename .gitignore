@@ -18,6 +18,7 @@ front/lib.wasm
 # Protobuf compilation
 front/src/proto
 lib/awfdata
+lib/wasm/wasm_svc_adapter.go
 
 # Output of generate
 lib/static/build.go

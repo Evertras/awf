@@ -15,10 +15,7 @@ var base js.Value
 var inst instance
 
 // RegisterCallbacks registers all functions with the gowasm global object on the front end
-func RegisterCallbacks() {
-	js.Global().Set("gowasm", map[string]interface{}{})
-	base = js.Global().Get("gowasm")
-
+func RegisterCallbacks(base js.Value) {
 	base.Set("sayHello", js.FuncOf(sayHello))
 	base.Set("initPrototype", js.FuncOf(initPrototype))
 	base.Set("getPotentialMoves", js.FuncOf(getPotentialMoves))
