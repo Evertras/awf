@@ -1,8 +1,8 @@
 import { loadAssets } from './assets';
 import { Game } from './game';
 import { awfdata } from './proto/messages';
-import { loadWASM } from './wasmloader';
 import { wasmImpl } from './rpc/impl';
+import { loadWASM } from './wasmloader';
 
 console.log('Hello Typescript World!');
 
@@ -70,12 +70,11 @@ loadWASM(async (err) => {
         return console.error(err);
     }
 
-	const wasmSvc = awfdata.WasmService.create(wasmImpl, false, false);
-	const helloReq = awfdata.EchoRequest.create({ text: 'Testing echo' });
-
-	console.log('Sending RPC call to echo with text: Testing echo');
-	const res = await wasmSvc.sayHello(helloReq);
-	console.log('RPC response:', res);
+    const wasmSvc = awfdata.WasmService.create(wasmImpl, false, false);
+    const helloReq = awfdata.EchoRequest.create({ text: 'Testing echo' });
+    console.log('Sending RPC call to echo with text: Testing echo');
+    const res = await wasmSvc.sayHello(helloReq);
+    console.log('RPC response:', res);
 
     ready();
 });
