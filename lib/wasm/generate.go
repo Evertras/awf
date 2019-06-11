@@ -47,6 +47,12 @@ func typedArrayToByteSlice(arg js.Value) []byte {
 	return bytes
 }
 
+// In the meantime we also will keep a single TypedArray that gets released when a new call
+// is requested.  This *should* be safe since JS is single threaded and the returned array
+// is immediately deserialized from its proto on the other end, and it'll keep memory from
+// leaking on our end.
+var returnedArray js.TypedArray
+
 var server awfdata.WasmServiceServer = &wasmServer{}
 
 func RegisterWasmCallbacks(base js.Value) {
@@ -78,11 +84,11 @@ func <<.Name>>(this js.Value, args []js.Value) interface{} {
 		panic(err)
 	}
 
-	typedArray := js.TypedArrayOf(marshaled)
+	// This is safe on initial zero value
+	returnedArray.Release()
+	returnedArray = js.TypedArrayOf(marshaled)
 
-	//defer typedArray.Release()
-
-	return typedArray
+	return returnedArray
 }
 <<end>>
 `
