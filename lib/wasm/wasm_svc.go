@@ -10,7 +10,7 @@ import (
 
 type wasmServer struct{}
 
-func (s *wasmServer) SayHello(ctx context.Context, req *awfdata.EchoRequest) (*awfdata.EchoResponse, error) {
+func (s *wasmServer) Echo(ctx context.Context, req *awfdata.EchoRequest) (*awfdata.EchoResponse, error) {
 	return &awfdata.EchoResponse{
 		Text: req.Text + " (echo)",
 	}, nil

@@ -16,17 +16,11 @@ var inst instance
 
 // RegisterCallbacks registers all functions with the gowasm global object on the front end
 func RegisterCallbacks(base js.Value) {
-	base.Set("sayHello", js.FuncOf(sayHello))
 	base.Set("initPrototype", js.FuncOf(initPrototype))
 	base.Set("getPotentialMoves", js.FuncOf(getPotentialMoves))
 	base.Set("getGameState", js.FuncOf(getGameState))
 
 	base.Set("ready", true)
-}
-
-func sayHello(this js.Value, args []js.Value) interface{} {
-	println("hello from go wasm module")
-	return nil
 }
 
 func initPrototype(this js.Value, args []js.Value) interface{} {
