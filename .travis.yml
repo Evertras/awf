@@ -7,7 +7,7 @@ env:
 before_script:
   - curl -sL https://taskfile.dev/install.sh | sh
 
-script: task
+script: ./bin/task
 
 go:
 - "1.12"
