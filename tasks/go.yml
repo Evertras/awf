@@ -19,7 +19,7 @@ tasks:
     cmds:
       - rm -rf {{.GO_PROTO_BUILD_DIR}}
       - mkdir {{.GO_PROTO_BUILD_DIR}}
-      - docker run -v ${PWD}:/defs namely/protoc-all -d messages -l go -o {{.GO_PROTO_BUILD_DIR}} || (rm -rf {{.GO_PROTO_BUILD_DIR}} && exit 1)
+      - docker run --rm -v ${PWD}:/defs namely/protoc-all -d messages -l go -o {{.GO_PROTO_BUILD_DIR}} || (rm -rf {{.GO_PROTO_BUILD_DIR}} && exit 1)
 
   wasm-service-gen:
     deps: [ proto ]
