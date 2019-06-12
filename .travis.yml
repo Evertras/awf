@@ -6,6 +6,7 @@ env:
 
 before_script:
   - curl -sL https://taskfile.dev/install.sh | sh
+  - go get -u github.com/Evertras/go-wasm-rpc/cmd/wasm-rpc-gen
 
 script: ./bin/task build test
 

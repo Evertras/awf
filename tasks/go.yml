@@ -25,11 +25,10 @@ tasks:
     deps: [ proto ]
     sources:
       - lib/awfdata/svc_wasm.pb.go
-      - lib/wasm/generate.go
     generates:
       - lib/wasm/wasm_svc_adapter.go
     cmds:
-      - go generate ./lib/wasm/
+      - wasm-rpc-gen lib/awfdata/svc_wasm.pb.go lib/wasm/generated.go github.com/Evertras/awf/lib/awfdata wasm
 
   build:
     cmds:

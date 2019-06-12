@@ -6,6 +6,17 @@ Planned to be a simple Advance Wars clone-ish with asymmetric fantasy style unit
 and an objective capture point system to determine a winner instead of total defeat
 in order to promote interesting tactical decisions without a long slog near the end.
 
+## Requirements
+
+* [Task](https://taskfile.dev/#/installation)
+* [go-wasm-rpc](https://github.com/Evertras/go-wasm-rpc).
+
+You can run the following script to install all dependencies besides Go:
+
+```bash
+./tasks/deps.sh
+```
+
 ## Gameplay Goals
 
 See [Gameplay doc](docs/Gameplay.md) for more details.

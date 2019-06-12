@@ -22,6 +22,7 @@ lib/wasm/wasm_svc_adapter.go
 
 # Output of generate
 lib/static/build.go
+lib/wasm/generated.go
 
 # Javascript stuff
 node_modules/
@@ -36,3 +37,4 @@ front/game.js.map
 
 # Visual Code settings
 .vscode
+
