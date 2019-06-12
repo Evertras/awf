@@ -88,28 +88,28 @@ func TestMoveErrorsGracefullyOnOutOfBoundsMoves(t *testing.T) {
 
 	// Now try to do bad moves
 	cmds := []*awfdata.CmdMove{
-		&awfdata.CmdMove{
+		{
 			Source: &awfdata.Point{
 				X: g.Map.Width,
 				Y: src.Y,
 			},
 			Destination: dest,
 		},
-		&awfdata.CmdMove{
+		{
 			Source: &awfdata.Point{
 				X: src.X,
 				Y: g.Map.Height,
 			},
 			Destination: dest,
 		},
-		&awfdata.CmdMove{
+		{
 			Source: src,
 			Destination: &awfdata.Point{
 				X: g.Map.Width,
 				Y: dest.Y,
 			},
 		},
-		&awfdata.CmdMove{
+		{
 			Source: src,
 			Destination: &awfdata.Point{
 				X: dest.X,

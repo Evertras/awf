@@ -17,11 +17,11 @@ func PrototypeMap() *awfdata.Map {
 		Height: height,
 		Tiles:  make([]*awfdata.Map_Tile, totalTiles),
 		Terrain: map[uint32]*awfdata.Terrain{
-			1: &awfdata.Terrain{
+			1: {
 				Name: "Prototype Open",
 				Id:   1,
 			},
-			2: &awfdata.Terrain{
+			2: {
 				Name:      "Prototype Objective",
 				Id:        2,
 				Objective: true,
@@ -51,7 +51,7 @@ func PrototypeMap() *awfdata.Map {
 // PrototypeFaction returns a simple prototype faction to play with
 func PrototypeFaction() *awfdata.Faction {
 	units := []*awfdata.Unit{
-		&awfdata.Unit{
+		{
 			Name:      "Infantry",
 			Movement:  2,
 			Strength:  5,
@@ -59,7 +59,7 @@ func PrototypeFaction() *awfdata.Faction {
 			Capturing: true,
 		},
 
-		&awfdata.Unit{
+		{
 			Name:           "Cavalry",
 			Movement:       4,
 			Strength:       3,
@@ -86,10 +86,10 @@ func PrototypeGame() (*awfdata.Game, error) {
 	g := &awfdata.Game{
 		Map: m,
 		Players: []*awfdata.Game_Player{
-			&awfdata.Game_Player{
+			{
 				Faction: PrototypeFaction(),
 			},
-			&awfdata.Game_Player{
+			{
 				Faction: PrototypeFaction(),
 			},
 		},
