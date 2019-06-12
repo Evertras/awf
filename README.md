@@ -1,6 +1,6 @@
 # Advanced Warfare: Fantasy Battles
 
-[![Build Status](https://travis-ci.org/Evertras/awf.svg?branch=master)](https://travis-ci.org/Evertras/awf) [![Report Card](https://goreportcard.com/badge/github.com/Evertras/awf)]
+[![Build Status](https://travis-ci.org/Evertras/awf.svg?branch=master)](https://travis-ci.org/Evertras/awf) ![Report Card](https://goreportcard.com/badge/github.com/Evertras/awf)
 
 Planned to be a simple Advance Wars clone-ish with asymmetric fantasy style units
 and an objective capture point system to determine a winner instead of total defeat
