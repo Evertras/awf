@@ -49,7 +49,11 @@ func TestPotentialMovementOpenMap(t *testing.T) {
 			Movement: uint32(movement),
 		}
 
-		moves := PotentialMoves(m, center)
+		moves, err := PotentialMoves(m, center)
+
+		if err != nil {
+			t.Errorf("Unexpected error getting potential moves: %v", err)
+		}
 
 		if len(moves) != expectedLens[movement] {
 			t.Errorf("For movement %d expected %d moves, but got %d", movement, expectedLens[movement], len(moves))
@@ -100,7 +104,11 @@ func TestPotentialMovementTerrainCosts(t *testing.T) {
 		TerrainCosts: terrainCosts,
 	}
 
-	moves := PotentialMoves(m, center)
+	moves, err := PotentialMoves(m, center)
+
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	for _, move := range moves {
 		dist := ManhattenDistance(move, center)

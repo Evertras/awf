@@ -1,6 +1,8 @@
 package awfdatautil
 
 import (
+	"errors"
+
 	"github.com/Evertras/awf/lib/awfdata"
 )
 
@@ -10,11 +12,15 @@ func MapTileAt(m *awfdata.Map, p *awfdata.Point) *awfdata.Map_Tile {
 }
 
 // PotentialMoves returns all potential destination squares for the unit
-func PotentialMoves(m *awfdata.Map, p *awfdata.Point) []*awfdata.Point {
+func PotentialMoves(m *awfdata.Map, p *awfdata.Point) ([]*awfdata.Point, error) {
+	if p.X < 0 || p.X >= m.Width || p.Y < 0 || p.Y >= m.Height {
+		return nil, errors.New("requested point out of map bounds")
+	}
+
 	source := MapTileAt(m, p)
 
 	if source.Unit == nil {
-		return nil
+		return nil, errors.New("no unit on this square")
 	}
 
 	hash := func(p *awfdata.Point) uint64 {
@@ -89,5 +95,5 @@ func PotentialMoves(m *awfdata.Map, p *awfdata.Point) []*awfdata.Point {
 		results = append(results, res)
 	}
 
-	return results
+	return results, nil
 }

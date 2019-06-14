@@ -26,7 +26,7 @@ tasks:
     sources:
       - lib/awfdata/svc_wasm.pb.go
     generates:
-      - lib/wasm/wasm_svc_adapter.go
+      - lib/wasm/generated.go
     cmds:
       - wasm-rpc-gen lib/awfdata/svc_wasm.pb.go lib/wasm/generated.go github.com/Evertras/awf/lib/awfdata wasm
 

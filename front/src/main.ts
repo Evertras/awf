@@ -29,31 +29,16 @@ window.addEventListener('resize', resize);
 
 let remaining = 2;
 
-function ready() {
+let wasmSvc: awfdata.WasmService;
+
+async function ready() {
     if (--remaining === 0) {
         console.log('Everything loaded');
 
-        gowasm.initPrototype((err?: string) => {
-            if (err) {
-                return console.error(err);
-            }
+        const state = await wasmSvc.getGameState(awfdata.GetGameStateRequest.create({}));
+        const gameVisual = new Game(state.state!);
 
-            console.log('Successfully loaded a prototype game');
-
-            const cb = (errState: string | undefined, raw: Uint8Array) => {
-                if (errState) {
-                    return console.error(errState);
-                }
-
-                const state = awfdata.Game.decode(raw);
-
-                const gameVisual = new Game(state);
-
-                app.stage.addChild(gameVisual);
-           };
-
-            gowasm.getGameState(cb);
-        });
+        app.stage.addChild(gameVisual);
     }
 }
 
@@ -66,11 +51,20 @@ loadWASM(async (err) => {
         return console.error(err);
     }
 
-    const wasmSvc = awfdata.WasmService.create(wasmImpl, false, false);
-    const helloReq = awfdata.EchoRequest.create({ text: 'Testing echo' });
+    wasmSvc = awfdata.WasmService.create(wasmImpl, false, false);
     console.log('Sending RPC call to echo with text: Testing echo');
-    const res = await wasmSvc.echo(helloReq);
-    console.log('RPC response:', res);
+    const res = await wasmSvc.echo({ text: 'Testing echo' });
+    console.log('RPC response:', res.text);
+
+    await wasmSvc.initPrototype({});
+
+    try {
+        const moves = await wasmSvc.getPotentialMoves({ from: {x: 4, y: 0 } });
+
+        console.log(moves.moves);
+    } catch (err) {
+        console.error(err);
+    }
 
     ready();
 });

@@ -2,6 +2,9 @@ syntax = "proto3";
 
 package awfdata;
 
+import "game.proto";
+import "point.proto";
+
 message EchoRequest {
 	string text = 1;
 }
@@ -10,6 +13,28 @@ message EchoResponse {
 	string text = 1;
 }
 
+message InitPrototypeRequest {}
+message InitPrototypeResponse {}
+
+message GetGameStateRequest {}
+message GetGameStateResponse {
+    Game state = 1;
+}
+
+message GetPotentialMovesRequest {
+    Point from = 1;
+}
+
+message GetPotentialMovesResponse {
+    repeated Point moves = 1;
+}
+
 service WasmService {
+    // Testing/debug
 	rpc Echo (EchoRequest) returns (EchoResponse) {}
+
+    // Game stuff
+    rpc InitPrototype (InitPrototypeRequest) returns (InitPrototypeResponse) {}
+    rpc GetGameState (GetGameStateRequest) returns (GetGameStateResponse) {}
+    rpc GetPotentialMoves (GetPotentialMovesRequest) returns (GetPotentialMovesResponse) {}
 }

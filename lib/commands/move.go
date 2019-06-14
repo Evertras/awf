@@ -40,7 +40,11 @@ func Move(cmd *awfdata.CmdMove, playerIndex int, g *awfdata.Game) error {
 		return errors.New("destination occupied")
 	}
 
-	potentials := awfdatautil.PotentialMoves(g.Map, cmd.Source)
+	potentials, err := awfdatautil.PotentialMoves(g.Map, cmd.Source)
+
+	if err != nil {
+		return err
+	}
 
 	found := false
 

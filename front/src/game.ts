@@ -12,7 +12,7 @@ export class Game extends PIXI.Container {
 
     private mousePos: MapLocation = new MapLocation();
 
-    constructor(g: awfdata.Game) {
+    constructor(g: awfdata.IGame) {
         super();
 
         if (!g.map || !g.map.width || !g.map.height || !g.map.tiles) {

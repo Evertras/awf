@@ -14,7 +14,6 @@ func main() {
 	js.Global().Set("gowasm", map[string]interface{}{})
 	base := js.Global().Get("gowasm")
 
-	wasm.RegisterCallbacks(base)
 	wasm.RegisterWasmCallbacks(base)
 
 	println("WASM initialized")
