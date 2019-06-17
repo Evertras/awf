@@ -59,7 +59,7 @@ loadWASM(async (err) => {
     await wasmSvc.initPrototype({});
 
     try {
-        const moves = await wasmSvc.getPotentialMoves({ from: {x: 4, y: 0 } });
+        const moves = await wasmSvc.getPotentialMoves({ from: {x: 5, y: 1 } });
 
         console.log(moves.moves);
     } catch (err) {

@@ -1,5 +1,4 @@
 import { tileSize } from './assets';
-import { MapLocation } from './mapLocation';
 import { awfdata } from './proto/messages';
 import { Map } from './visuals/map';
 import { MovementOverlay } from './visuals/movementOverlay';
@@ -10,7 +9,7 @@ export class Game extends PIXI.Container {
     private moveOverlay: MovementOverlay;
     private units: Unit[] = [];
 
-    private mousePos: MapLocation = new MapLocation();
+    private mousePos: awfdata.IPoint = { x: 0, y: 0 };
 
     constructor(g: awfdata.IGame) {
         super();
