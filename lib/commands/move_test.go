@@ -11,8 +11,8 @@ import (
 
 func TestMoveWorksSimple(t *testing.T) {
 	playerID := 3
-	src := &awfdata.Point{X: 0, Y: 0}
-	dest := &awfdata.Point{X: 1, Y: 2}
+	src := &awfdata.Point{X: 1, Y: 2}
+	dest := &awfdata.Point{X: 2, Y: 3}
 	g, err := loaders.PrototypeGame()
 
 	if err != nil {
@@ -63,8 +63,8 @@ func TestMoveWorksSimple(t *testing.T) {
 
 func TestMoveErrorsGracefullyOnOutOfBoundsMoves(t *testing.T) {
 	playerID := 3
-	src := &awfdata.Point{X: 0, Y: 0}
-	dest := &awfdata.Point{X: 1, Y: 1}
+	src := &awfdata.Point{X: 1, Y: 1}
+	dest := &awfdata.Point{X: 2, Y: 2}
 	g, err := loaders.PrototypeGame()
 
 	if err != nil {
@@ -133,8 +133,8 @@ func TestMoveErrorsGracefullyOnOutOfBoundsMoves(t *testing.T) {
 
 func TestMoveErrorsFromWrongPlayer(t *testing.T) {
 	playerID := 3
-	src := &awfdata.Point{X: 0, Y: 0}
-	dest := &awfdata.Point{X: 1, Y: 2}
+	src := &awfdata.Point{X: 1, Y: 1}
+	dest := &awfdata.Point{X: 2, Y: 3}
 	g, err := loaders.PrototypeGame()
 
 	if err != nil {
@@ -179,8 +179,8 @@ func TestMoveErrorsFromWrongPlayer(t *testing.T) {
 
 func TestMoveErrorsFromOutOfRange(t *testing.T) {
 	playerID := 3
-	src := &awfdata.Point{X: 0, Y: 0}
-	dest := &awfdata.Point{X: 2, Y: 2}
+	src := &awfdata.Point{X: 1, Y: 1}
+	dest := &awfdata.Point{X: 3, Y: 3}
 	movement := 3 // need 4, so this should error
 	g, err := loaders.PrototypeGame()
 
@@ -225,8 +225,8 @@ func TestMoveErrorsFromOutOfRange(t *testing.T) {
 
 func TestMoveOnlyOncePerTurn(t *testing.T) {
 	playerID := 3
-	src := &awfdata.Point{X: 0, Y: 0}
-	dest := &awfdata.Point{X: 1, Y: 1}
+	src := &awfdata.Point{X: 1, Y: 1}
+	dest := &awfdata.Point{X: 2, Y: 2}
 	movement := 3 // this is one more than required
 	g, err := loaders.PrototypeGame()
 

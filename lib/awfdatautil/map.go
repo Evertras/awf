@@ -8,7 +8,7 @@ import (
 
 // MapTileAt returns the map tile located at x, y; no bounds checking, be careful!
 func MapTileAt(m *awfdata.Map, p *awfdata.Point) *awfdata.Map_Tile {
-	return m.Tiles[p.Y*m.Width+p.X]
+	return m.Tiles[(p.Y-1)*m.Width+(p.X-1)]
 }
 
 // PotentialMoves returns all potential destination squares for the unit
@@ -68,7 +68,7 @@ func PotentialMoves(m *awfdata.Map, p *awfdata.Point) ([]*awfdata.Point, error) 
 			return
 		}
 
-		if p.Y > 0 && last.Y >= p.Y {
+		if p.Y > 1 && last.Y >= p.Y {
 			explore(&awfdata.Point{X: p.X, Y: p.Y - 1}, move, p)
 		}
 
@@ -76,7 +76,7 @@ func PotentialMoves(m *awfdata.Map, p *awfdata.Point) ([]*awfdata.Point, error) 
 			explore(&awfdata.Point{X: p.X, Y: p.Y + 1}, move, p)
 		}
 
-		if p.X > 0 && last.X >= p.X {
+		if p.X > 1 && last.X >= p.X {
 			explore(&awfdata.Point{X: p.X - 1, Y: p.Y}, move, p)
 		}
 

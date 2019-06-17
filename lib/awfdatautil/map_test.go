@@ -18,8 +18,8 @@ func TestMapTileAt(t *testing.T) {
 		for y := uint32(0); y < sampleHeight; y++ {
 			expectedID := x*1000 + y
 			tile := MapTileAt(m, &awfdata.Point{
-				X: x,
-				Y: y,
+				X: x + 1,
+				Y: y + 1,
 			})
 
 			if tile.TerrainId != expectedID {
@@ -90,7 +90,7 @@ func TestPotentialMovementTerrainCosts(t *testing.T) {
 	movement := 8
 	cost := 3
 
-	center := &awfdata.Point{X: uint32(sampleWidth / 2), Y: uint32(sampleHeight / 2)}
+	center := &awfdata.Point{X: uint32(sampleWidth/2) + 1, Y: uint32(sampleHeight/2) + 1}
 
 	origin := MapTileAt(m, center)
 
@@ -122,7 +122,7 @@ func TestPotentialMovementTerrainCosts(t *testing.T) {
 func BenchmarkPotentialMoves(b *testing.B) {
 	m := generateSampleOpenMap()
 
-	center := &awfdata.Point{X: sampleWidth / 2, Y: sampleHeight / 2}
+	center := &awfdata.Point{X: sampleWidth/2 + 1, Y: sampleHeight/2 + 1}
 
 	origin := MapTileAt(m, center)
 
