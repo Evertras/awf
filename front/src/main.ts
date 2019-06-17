@@ -18,25 +18,24 @@ app.renderer.view.style.display = 'block';
 app.start();
 
 function resize(): void {
-    // Resize the renderer
     app.renderer.resize(window.innerWidth, window.innerHeight);
 }
 
 resize();
 
-// Listen for window resize events
 window.addEventListener('resize', resize);
 
 let remaining = 2;
-
-let wasmSvc: awfdata.WasmService;
 
 async function ready() {
     if (--remaining === 0) {
         console.log('Everything loaded');
 
+        const wasmSvc = awfdata.WasmService.create(wasmImpl, false, false);
+        await wasmSvc.initPrototype({});
+
         const state = await wasmSvc.getGameState(awfdata.GetGameStateRequest.create({}));
-        const gameVisual = new Game(state.state!);
+        const gameVisual = new Game(state.state!, wasmSvc);
 
         app.stage.addChild(gameVisual);
     }
@@ -49,21 +48,6 @@ loadAssets(() => {
 loadWASM(async (err) => {
     if (err) {
         return console.error(err);
-    }
-
-    wasmSvc = awfdata.WasmService.create(wasmImpl, false, false);
-    console.log('Sending RPC call to echo with text: Testing echo');
-    const res = await wasmSvc.echo({ text: 'Testing echo' });
-    console.log('RPC response:', res.text);
-
-    await wasmSvc.initPrototype({});
-
-    try {
-        const moves = await wasmSvc.getPotentialMoves({ from: {x: 5, y: 1 } });
-
-        console.log(moves.moves);
-    } catch (err) {
-        console.error(err);
     }
 
     ready();

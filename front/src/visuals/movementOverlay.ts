@@ -35,8 +35,8 @@ export class MovementOverlay extends PIXI.Container {
         } else {
             const s = new PIXI.Sprite(textureSquareMove());
 
-            s.x = x * tileSize;
-            s.y = y * tileSize;
+            s.x = (x-1) * tileSize;
+            s.y = (y-1) * tileSize;
             s.anchor.x = 0.5;
             s.anchor.y = 0.5;
 
@@ -47,6 +47,6 @@ export class MovementOverlay extends PIXI.Container {
     }
 
     private index(x: number, y: number): number {
-        return y * this.mapWidth + x;
+        return (y-1) * this.mapWidth + (x-1);
     }
 }

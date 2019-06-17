@@ -8,11 +8,14 @@ export class Game extends PIXI.Container {
     private map: Map;
     private moveOverlay: MovementOverlay;
     private units: Unit[] = [];
+    private readonly awf: awfdata.WasmService;
 
-    private mousePos: awfdata.IPoint = { x: 0, y: 0 };
+    private mousePos: awfdata.IPoint = {};
 
-    constructor(g: awfdata.IGame) {
+    constructor(g: awfdata.IGame, awf: awfdata.WasmService) {
         super();
+
+        this.awf = awf;
 
         if (!g.map || !g.map.width || !g.map.height || !g.map.tiles) {
             throw new Error('Game map not defined');
@@ -48,23 +51,37 @@ export class Game extends PIXI.Container {
         this.hitArea = new PIXI.Rectangle(0, 0, this.map.width * tileSize, this.map.height * tileSize);
         this.interactive = true;
 
-        this.on('mousemove', (obj: PIXI.interaction.InteractionEvent) => {
+        this.on('mousemove', async (obj: PIXI.interaction.InteractionEvent) => {
             if (!obj.target || !obj.data) {
                 return;
             }
 
             const rawPos = obj.data.getLocalPosition(this);
 
-            const x = Math.floor(rawPos.x / tileSize + 0.5);
-            const y = Math.floor(rawPos.y / tileSize + 0.5);
+            const x = Math.floor(rawPos.x / tileSize + 0.5) + 1;
+            const y = Math.floor(rawPos.y / tileSize + 0.5) + 1;
 
             if (this.mousePos.x !== x || this.mousePos.y !== y) {
                 this.mousePos.x = x;
                 this.mousePos.y = y;
 
-                if (x >= 0 && x < this.map.width && y >= 0 && y < this.map.height) {
-                    this.moveOverlay.clear();
-                    this.moveOverlay.enableSquare(x, y);
+                if (x < 1 || x > this.map.width || y < 1 || y > this.map.height) {
+                    return;
+                }
+
+                this.moveOverlay.clear();
+
+                try {
+                    const req = { from: this.mousePos };
+                    const possibleMoves = await this.awf.getPotentialMoves(req);
+
+                    for (const possible of possibleMoves.moves) {
+                        console.log(possible);
+                        this.moveOverlay.enableSquare(possible.x!, possible.y!);
+                    }
+                } catch (e) {
+                    console.error(e);
+                    return;
                 }
             }
         });
