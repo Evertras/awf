@@ -43,5 +43,5 @@ tasks:
   test:
     deps: [ proto ]
     cmds:
-      - npx tslint -p .
+      - npx tslint -p . --fix
       - npm test

@@ -11,6 +11,10 @@ message Unit {
     // Zero-indexed player ID
     uint32 owner = 11;
 
+    // A unique ID for this particular unit instance
+    uint32 id = 13;
+
+    // General stats
     string name = 1;
     uint32 movement = 2;
     uint32 strength = 3;

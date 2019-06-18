@@ -23,6 +23,10 @@ func PotentialMoves(m *awfdata.Map, p *awfdata.Point) ([]*awfdata.Point, error) 
 		return nil, errors.New("no unit on this square")
 	}
 
+	if source.Unit.Moved {
+		return nil, errors.New("unit already moved")
+	}
+
 	hash := func(p *awfdata.Point) uint64 {
 		return uint64(p.X) + uint64(p.Y)<<32
 	}

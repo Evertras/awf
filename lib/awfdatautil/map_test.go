@@ -83,6 +83,26 @@ func TestPotentialMovementOpenMap(t *testing.T) {
 	}
 }
 
+func TestUnitCantMoveTwice(t *testing.T) {
+	m := generateSampleOpenMap()
+
+	center := &awfdata.Point{X: uint32(sampleWidth / 2), Y: uint32(sampleHeight / 2)}
+
+	origin := MapTileAt(m, center)
+
+	origin.Unit = &awfdata.Unit{
+		Name:     "SampleMover",
+		Movement: uint32(2),
+		Moved:    true,
+	}
+
+	_, err := PotentialMoves(m, center)
+
+	if err == nil {
+		t.Errorf("Expected an error for a unit that already moved, but got none")
+	}
+}
+
 func TestPotentialMovementTerrainCosts(t *testing.T) {
 	m := generateSampleOpenMap()
 

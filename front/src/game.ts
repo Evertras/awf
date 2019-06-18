@@ -1,9 +1,9 @@
+import { TypeState } from 'typestate';
 import { tileSize } from './assets';
 import { awfdata } from './proto/messages';
 import { Map } from './visuals/map';
 import { MovementOverlay } from './visuals/movementOverlay';
 import { Unit } from './visuals/unit';
-import { TypeState } from 'typestate';
 
 // TODO: Move this when structure is solidified
 enum GameState {
@@ -16,11 +16,11 @@ enum GameState {
 export class Game extends PIXI.Container {
     private map: Map;
     private moveOverlay: MovementOverlay;
-    private units: Unit[] = [];
+    private units: { [id: number]: Unit } = {};
     private selectedUnitPos: awfdata.IPoint | null = null;
     private readonly awf: awfdata.WasmService;
 
-    private mousePos: awfdata.IPoint = {};
+    private mousePos: awfdata.IPoint = { x: 1, y: 1 };
     private readonly state: TypeState.FiniteStateMachine<GameState>;
 
     constructor(g: awfdata.IGame, awf: awfdata.WasmService) {
@@ -30,10 +30,10 @@ export class Game extends PIXI.Container {
 
         this.state.on(GameState.Idle, () => {
             this.selectedUnitPos = null;
+            this.moveOverlay.clear();
         });
 
         this.state.onEnter(GameState.UnitSelected, (): boolean => {
-            return true;
             return this.selectedUnitPos !== null;
         });
 
@@ -66,7 +66,7 @@ export class Game extends PIXI.Container {
                 if (tile.unit) {
                     const u = new Unit(tile.unit);
 
-                    this.units.push(u);
+                    this.units[u.unit.id!] = u;
 
                     u.x = tileSize * x;
                     u.y = tileSize * y;
@@ -90,15 +90,13 @@ export class Game extends PIXI.Container {
                 return;
             }
 
-            const rawPos = obj.data.getLocalPosition(this);
-
-            this.updateMousePos(rawPos);
+            this.updateMousePos(obj);
 
             if (!this.mousePos.x || !this.mousePos.y || !this.map.data.tiles) {
                 return;
             }
 
-            const tile = this.map.data.tiles[(this.mousePos.y-1) * this.map.width + (this.mousePos.x - 1)];
+            const tile = this.map.data.tiles[(this.mousePos.y - 1) * this.map.width + (this.mousePos.x - 1)];
 
             switch (this.state.currentState) {
                 case GameState.Idle:
@@ -106,13 +104,55 @@ export class Game extends PIXI.Container {
                         return;
                     }
 
-                    this.selectedUnitPos = this.mousePos;
-                    this.state.go(GameState.UnitSelected);
-                    console.log(this.state.currentState);
+                    try {
+                        // This will fail if we can't move, which makes for a convenient check
+                        await this.awf.getPotentialMoves({ from: this.mousePos });
+
+                        this.selectedUnitPos = {
+                            x: this.mousePos.x,
+                            y: this.mousePos.y,
+                        };
+
+                        this.state.go(GameState.UnitSelected);
+                    } catch(e) {}
                     break;
 
                 case GameState.UnitSelected:
-                    console.log('Want to move to', this.mousePos);
+                    try {
+
+                        const unitPos = this.selectedUnitPos!;
+                        const mapIndex = (unitPos.y! - 1) * this.map.width + (unitPos.x! - 1);
+                        const movingUnit = this.map.data.tiles[mapIndex].unit;
+
+                        if (!movingUnit) {
+                            throw new Error('No unit found here');
+                        }
+
+                        console.log('Moving', movingUnit);
+
+                        await this.awf.move({
+                            cmd: {
+                                source: this.selectedUnitPos,
+                                destination: this.mousePos,
+                            },
+                        });
+
+                        const visualUnit = this.units[movingUnit.id!];
+
+                        visualUnit.x = (this.mousePos.x! - 1) * tileSize;
+                        visualUnit.y = (this.mousePos.y! - 1) * tileSize;
+
+                        const response = await this.awf.getGameState({});
+                        if (!response.state || !response.state.map || !response.state.map.tiles) {
+                            throw new Error('Did not find game state or game state was malformed');
+                        }
+
+                        this.map.data = response.state.map;
+
+                        this.state.go(GameState.Idle);
+                    } catch (e) {
+                        console.error(e);
+                    }
                     break;
             }
         });
@@ -122,9 +162,7 @@ export class Game extends PIXI.Container {
                 return;
             }
 
-            const rawPos = obj.data.getLocalPosition(this);
-
-            if (this.updateMousePos(rawPos)) {
+            if (this.updateMousePos(obj)) {
                 if (this.state.is(GameState.Idle)) {
                     this.moveOverlay.clear();
 
@@ -143,9 +181,11 @@ export class Game extends PIXI.Container {
         });
     }
 
-    private updateMousePos(point: PIXI.Point): boolean {
-        const x = Math.floor(point.x / tileSize + 0.5) + 1;
-        const y = Math.floor(point.y / tileSize + 0.5) + 1;
+    private updateMousePos(obj: PIXI.interaction.InteractionEvent): boolean {
+        const rawPos = obj.data.getLocalPosition(this);
+
+        const x = Math.floor(rawPos.x / tileSize + 0.5) + 1;
+        const y = Math.floor(rawPos.y / tileSize + 0.5) + 1;
 
         if (x < 1 || x > this.map.width || y < 1 || y > this.map.height) {
             return false;

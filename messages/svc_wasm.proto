@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package awfdata;
 
+import "cmd_move.proto";
 import "game.proto";
 import "point.proto";
 
@@ -29,12 +30,19 @@ message GetPotentialMovesResponse {
     repeated Point moves = 1;
 }
 
+message MoveRequest {
+    CmdMove cmd = 1;
+}
+
+message MoveResponse {}
+
 service WasmService {
     // Testing/debug
 	rpc Echo (EchoRequest) returns (EchoResponse) {}
 
     // Game stuff
     rpc InitPrototype (InitPrototypeRequest) returns (InitPrototypeResponse) {}
+    rpc Move (MoveRequest) returns (MoveResponse) {}
     rpc GetGameState (GetGameStateRequest) returns (GetGameStateResponse) {}
     rpc GetPotentialMoves (GetPotentialMovesRequest) returns (GetPotentialMovesResponse) {}
 }

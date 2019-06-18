@@ -5,6 +5,7 @@ import (
 
 	"github.com/Evertras/awf/lib/awfdata"
 	"github.com/Evertras/awf/lib/awfdatautil"
+	"github.com/Evertras/awf/lib/commands"
 	"github.com/Evertras/awf/lib/loaders"
 )
 
@@ -42,4 +43,10 @@ func (s *wasmServer) GetPotentialMoves(ctx context.Context, req *awfdata.GetPote
 	potentialMoves, err := awfdatautil.PotentialMoves(inst.game.Map, req.From)
 
 	return &awfdata.GetPotentialMovesResponse{Moves: potentialMoves}, err
+}
+
+func (s *wasmServer) Move(ctx context.Context, req *awfdata.MoveRequest) (*awfdata.MoveResponse, error) {
+	err := commands.Move(req.Cmd, 0, inst.game)
+
+	return &awfdata.MoveResponse{}, err
 }

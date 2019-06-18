@@ -77,6 +77,6 @@ To verify, should see "Hello World" in console when loading page via server.
 * [x] A level is loaded via WASM call
 * [x] The level is visible on screen with distinguishable terrain tiles
 * [x] A few units are loaded via WASM call and visible on some tiles
-* [ ] The player can click the unit and see potential destinations, then click again to move the unit there (via WASM)
+* [x] The player can click the unit and see potential destinations, then click again to move the unit there (via WASM)
 * [ ] The player can hit 'end turn' to start a new turn (no opponents yet)
 
