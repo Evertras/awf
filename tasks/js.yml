@@ -6,6 +6,7 @@ tasks:
       - rm -f front/game.js
       - rm -f front/game.js.map
       - rm -rf front/src/proto
+      - rm -rf .task/checksum/js-*
 
   npm:
     sources:

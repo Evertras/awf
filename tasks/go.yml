@@ -9,7 +9,7 @@ tasks:
       - rm -rf {{.GO_PROTO_BUILD_DIR}}
       - rm -f awf-server
       - rm -f front/lib.wasm
-      - rm -rf .task
+      - rm -rf .task/checksum/go-*
       - rm -f lib/wasm/wasm_svc_adapter.go
 
   proto:
