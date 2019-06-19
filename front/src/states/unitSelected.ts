@@ -15,6 +15,7 @@ export class GameStateUnitSelected implements IGameState {
     }
 
     public async mouseMovedTo(): Promise<IGameState | null> {
+        // Showing a path would be neat here, but that'll have to wait
         return null;
     }
 
@@ -31,8 +32,6 @@ export class GameStateUnitSelected implements IGameState {
             if (!movingUnit) {
                 throw new Error('No unit found here');
             }
-
-            console.log('Moving', movingUnit);
 
             await data.awfService.move({
                 cmd: {
@@ -52,15 +51,15 @@ export class GameStateUnitSelected implements IGameState {
             }
 
             data.visuals.map.data = response.state.map;
-
-            // TODO: Make this cleaner, don't like how this is magical right now
-            data.visuals.movementOverlay.clear();
-
-            return new GameStateIdle();
         } catch (e) {
-            console.error(e);
+            // This is fine, just don't do anything else
         }
 
-        return null;
+        // Whether we suceeded or not, just go back to Idle... either we moved successfully,
+        // or the user clicked somewhere else and canceled it.  Either is fine.
+
+        // TODO: Make this cleaner, don't like how this is magical right now
+        data.visuals.movementOverlay.clear();
+        return new GameStateIdle();
     }
 }
