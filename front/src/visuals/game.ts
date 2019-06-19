@@ -1,5 +1,5 @@
-import { MovementOverlay } from './movementOverlay';
 import { Map } from './map';
+import { MovementOverlay } from './movementOverlay';
 import { Unit } from './unit';
 
 export interface IGameVisuals {

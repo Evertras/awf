@@ -1,5 +1,5 @@
-import { GameState, IGameState, IGameStateData } from './index';
 import { awfdata } from '../proto/messages';
+import { GameState, IGameState, IGameStateData } from './index';
 import { GameStateUnitSelected } from './unitSelected';
 
 export class GameStateIdle implements IGameState {
@@ -45,9 +45,10 @@ export class GameStateIdle implements IGameState {
             };
 
             return new GameStateUnitSelected(selectedUnitPos);
-        } catch(e) {}
+        } catch (e) {
+            // This is fine, just don't do anything else
+        }
 
         return null;
     }
 }
-

@@ -1,6 +1,6 @@
-import { awfdata } from "../proto/messages";
-import { IGameVisuals } from "../visuals/game";
-import { GameStateIdle } from "./idle";
+import { awfdata } from '../proto/messages';
+import { IGameVisuals } from '../visuals/game';
+import { GameStateIdle } from './idle';
 
 export enum GameState {
     None,
@@ -27,9 +27,6 @@ export interface IGameState {
 export class GameStateMachine {
     private state: IGameState = new GameStateIdle();
 
-    constructor() {
-    }
-
     public async mouseMovedTo(data: IGameStateData, pos: awfdata.IPoint): Promise<void> {
         const newState = await this.state.mouseMovedTo(data, pos);
 
@@ -46,4 +43,3 @@ export class GameStateMachine {
         }
     }
 }
-

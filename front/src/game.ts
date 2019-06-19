@@ -1,15 +1,14 @@
 import { tileSize } from './assets';
 import { awfdata } from './proto/messages';
+import { GameStateMachine, IGameStateData } from './states';
+import { IGameVisuals } from './visuals/game';
 import { Map } from './visuals/map';
 import { MovementOverlay } from './visuals/movementOverlay';
 import { Unit } from './visuals/unit';
-import { IGameVisuals } from './visuals/game';
-import { GameStateMachine, IGameStateData } from './states';
 
 export class Game extends PIXI.Container {
     private readonly visuals: IGameVisuals;
     private readonly awf: awfdata.WasmService;
-    //private readonly gameData: awfdata.IGame;
 
     private mousePos: awfdata.IPoint = { x: 1, y: 1 };
 
@@ -18,7 +17,7 @@ export class Game extends PIXI.Container {
     constructor(g: awfdata.IGame, awf: awfdata.WasmService) {
         super();
 
-        //this.gameData = g;
+        // this.gameData = g;
 
         this.awf = awf;
 
@@ -71,7 +70,8 @@ export class Game extends PIXI.Container {
                 return;
             }
 
-            const tile = this.visuals.map.data.tiles[(this.mousePos.y - 1) * this.visuals.map.width + (this.mousePos.x - 1)];
+            const tile = this.visuals.map.data.tiles[(this.mousePos.y - 1)
+                        * this.visuals.map.width + (this.mousePos.x - 1)];
             */
         });
 

@@ -1,7 +1,7 @@
-import { GameState, IGameState, IGameStateData } from './index';
-import { awfdata } from '../proto/messages';
 import { tileSize } from '../assets';
+import { awfdata } from '../proto/messages';
 import { GameStateIdle } from './idle';
+import { GameState, IGameState, IGameStateData } from './index';
 
 export class GameStateUnitSelected implements IGameState {
     private readonly selectedUnitPos: awfdata.IPoint;
@@ -52,6 +52,8 @@ export class GameStateUnitSelected implements IGameState {
             }
 
             data.visuals.map.data = response.state.map;
+
+            // TODO: Make this cleaner, don't like how this is magical right now
             data.visuals.movementOverlay.clear();
 
             return new GameStateIdle();
@@ -62,4 +64,3 @@ export class GameStateUnitSelected implements IGameState {
         return null;
     }
 }
-
