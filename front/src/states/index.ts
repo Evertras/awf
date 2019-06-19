@@ -27,6 +27,14 @@ export interface IGameState {
 export class GameStateMachine {
     private state: IGameState = new GameStateIdle();
 
+    public async mouseMovedTo(data: IGameStateData, pos: awfdata.IPoint): Promise<void> {
+        this.changeState(await this.state.mouseMovedTo(data, pos), data);
+    }
+
+    public async clicked(data: IGameStateData, pos: awfdata.IPoint): Promise<void> {
+        this.changeState(await this.state.clicked(data, pos), data);
+    }
+
     private changeState(state: IGameState | null, data: IGameStateData) {
         if (!state) {
             return;
@@ -34,13 +42,5 @@ export class GameStateMachine {
 
         this.state = state;
         this.state.init(data);
-    }
-
-    public async mouseMovedTo(data: IGameStateData, pos: awfdata.IPoint): Promise<void> {
-        this.changeState(await this.state.mouseMovedTo(data, pos), data);
-    }
-
-    public async clicked(data: IGameStateData, pos: awfdata.IPoint): Promise<void> {
-        this.changeState(await this.state.clicked(data, pos), data);
     }
 }
