@@ -64,15 +64,6 @@ export class Game extends PIXI.Container {
             this.updateMousePos(obj);
 
             await this.state.clicked(this.getStateData(), this.mousePos);
-
-            /*
-            if (!this.mousePos.x || !this.mousePos.y || !this.visuals.map.data.tiles) {
-                return;
-            }
-
-            const tile = this.visuals.map.data.tiles[(this.mousePos.y - 1)
-                        * this.visuals.map.width + (this.mousePos.x - 1)];
-            */
         });
 
         this.on('mousemove', async (obj: PIXI.interaction.InteractionEvent) => {
