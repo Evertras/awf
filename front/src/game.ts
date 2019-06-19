@@ -1,53 +1,24 @@
-import { TypeState } from 'typestate';
 import { tileSize } from './assets';
 import { awfdata } from './proto/messages';
 import { Map } from './visuals/map';
 import { MovementOverlay } from './visuals/movementOverlay';
 import { Unit } from './visuals/unit';
-
-// TODO: Move this when structure is solidified
-enum GameState {
-    None,
-    Idle,
-    UnitSelected,
-    UnitMoving,
-}
+import { IGameVisuals } from './visuals/game';
+import { GameStateMachine, IGameStateData } from './states';
 
 export class Game extends PIXI.Container {
-    private map: Map;
-    private moveOverlay: MovementOverlay;
-    private units: { [id: number]: Unit } = {};
-    private selectedUnitPos: awfdata.IPoint | null = null;
+    private readonly visuals: IGameVisuals;
     private readonly awf: awfdata.WasmService;
+    //private readonly gameData: awfdata.IGame;
 
     private mousePos: awfdata.IPoint = { x: 1, y: 1 };
-    private readonly state: TypeState.FiniteStateMachine<GameState>;
+
+    private readonly state: GameStateMachine = new GameStateMachine();
 
     constructor(g: awfdata.IGame, awf: awfdata.WasmService) {
         super();
 
-        this.state = new TypeState.FiniteStateMachine<GameState>(GameState.Idle);
-
-        this.state.on(GameState.Idle, () => {
-            this.selectedUnitPos = null;
-            this.moveOverlay.clear();
-        });
-
-        this.state.onEnter(GameState.UnitSelected, (): boolean => {
-            return this.selectedUnitPos !== null;
-        });
-
-        // Player selects a unit
-        this.state.from(GameState.Idle).to(GameState.UnitSelected);
-
-        // Player cancels their selection
-        this.state.from(GameState.UnitSelected).to(GameState.Idle);
-
-        // Player commands unit to move
-        this.state.from(GameState.UnitSelected).to(GameState.UnitMoving);
-
-        // Unit finishes moving and player can select another unit
-        this.state.from(GameState.UnitMoving).to(GameState.Idle);
+        //this.gameData = g;
 
         this.awf = awf;
 
@@ -55,9 +26,14 @@ export class Game extends PIXI.Container {
             throw new Error('Game map not defined');
         }
 
-        this.map = new Map(g.map);
+        this.visuals = {
+            movementOverlay: new MovementOverlay(g.map.width, g.map.height),
+            map: new Map(g.map),
+            units: {},
+        } as IGameVisuals;
 
-        this.addChild(this.map.layer);
+        this.addChild(this.visuals.map.layer);
+        this.addChild(this.visuals.movementOverlay);
 
         for (let x = 0; x < g.map.width; ++x) {
             for (let y = 0; y < g.map.height; ++y) {
@@ -66,7 +42,7 @@ export class Game extends PIXI.Container {
                 if (tile.unit) {
                     const u = new Unit(tile.unit);
 
-                    this.units[u.unit.id!] = u;
+                    this.visuals.units[u.unit.id!] = u;
 
                     u.x = tileSize * x;
                     u.y = tileSize * y;
@@ -76,13 +52,9 @@ export class Game extends PIXI.Container {
             }
         }
 
-        this.moveOverlay = new MovementOverlay(this.map.width, this.map.height);
-
-        this.addChild(this.moveOverlay);
-
         this.x = 100;
         this.y = 100;
-        this.hitArea = new PIXI.Rectangle(0, 0, this.map.width * tileSize, this.map.height * tileSize);
+        this.hitArea = new PIXI.Rectangle(0, 0, this.visuals.map.width * tileSize, this.visuals.map.height * tileSize);
         this.interactive = true;
 
         this.on('click', async (obj: PIXI.interaction.InteractionEvent) => {
@@ -92,69 +64,15 @@ export class Game extends PIXI.Container {
 
             this.updateMousePos(obj);
 
-            if (!this.mousePos.x || !this.mousePos.y || !this.map.data.tiles) {
+            await this.state.clicked(this.getStateData(), this.mousePos);
+
+            /*
+            if (!this.mousePos.x || !this.mousePos.y || !this.visuals.map.data.tiles) {
                 return;
             }
 
-            const tile = this.map.data.tiles[(this.mousePos.y - 1) * this.map.width + (this.mousePos.x - 1)];
-
-            switch (this.state.currentState) {
-                case GameState.Idle:
-                    if (!tile.unit) {
-                        return;
-                    }
-
-                    try {
-                        // This will fail if we can't move, which makes for a convenient check
-                        await this.awf.getPotentialMoves({ from: this.mousePos });
-
-                        this.selectedUnitPos = {
-                            x: this.mousePos.x,
-                            y: this.mousePos.y,
-                        };
-
-                        this.state.go(GameState.UnitSelected);
-                    } catch(e) {}
-                    break;
-
-                case GameState.UnitSelected:
-                    try {
-
-                        const unitPos = this.selectedUnitPos!;
-                        const mapIndex = (unitPos.y! - 1) * this.map.width + (unitPos.x! - 1);
-                        const movingUnit = this.map.data.tiles[mapIndex].unit;
-
-                        if (!movingUnit) {
-                            throw new Error('No unit found here');
-                        }
-
-                        console.log('Moving', movingUnit);
-
-                        await this.awf.move({
-                            cmd: {
-                                source: this.selectedUnitPos,
-                                destination: this.mousePos,
-                            },
-                        });
-
-                        const visualUnit = this.units[movingUnit.id!];
-
-                        visualUnit.x = (this.mousePos.x! - 1) * tileSize;
-                        visualUnit.y = (this.mousePos.y! - 1) * tileSize;
-
-                        const response = await this.awf.getGameState({});
-                        if (!response.state || !response.state.map || !response.state.map.tiles) {
-                            throw new Error('Did not find game state or game state was malformed');
-                        }
-
-                        this.map.data = response.state.map;
-
-                        this.state.go(GameState.Idle);
-                    } catch (e) {
-                        console.error(e);
-                    }
-                    break;
-            }
+            const tile = this.visuals.map.data.tiles[(this.mousePos.y - 1) * this.visuals.map.width + (this.mousePos.x - 1)];
+            */
         });
 
         this.on('mousemove', async (obj: PIXI.interaction.InteractionEvent) => {
@@ -163,22 +81,16 @@ export class Game extends PIXI.Container {
             }
 
             if (this.updateMousePos(obj)) {
-                if (this.state.is(GameState.Idle)) {
-                    this.moveOverlay.clear();
-
-                    try {
-                        const req = { from: this.mousePos };
-                        const possibleMoves = await this.awf.getPotentialMoves(req);
-
-                        for (const possible of possibleMoves.moves) {
-                            this.moveOverlay.enableSquare(possible.x!, possible.y!);
-                        }
-                    } catch (e) {
-                        // TODO: Validate up front better and treat this as a legit error?
-                    }
-                }
+                await this.state.mouseMovedTo(this.getStateData(), this.mousePos);
             }
         });
+    }
+
+    private getStateData(): IGameStateData {
+        return {
+            visuals: this.visuals,
+            awfService: this.awf,
+        } as IGameStateData;
     }
 
     private updateMousePos(obj: PIXI.interaction.InteractionEvent): boolean {
@@ -187,7 +99,7 @@ export class Game extends PIXI.Container {
         const x = Math.floor(rawPos.x / tileSize + 0.5) + 1;
         const y = Math.floor(rawPos.y / tileSize + 0.5) + 1;
 
-        if (x < 1 || x > this.map.width || y < 1 || y > this.map.height) {
+        if (x < 1 || x > this.visuals.map.width || y < 1 || y > this.visuals.map.height) {
             return false;
         }
 
