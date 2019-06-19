@@ -10,6 +10,10 @@ export class GameStateUnitSelected implements IGameState {
         this.selectedUnitPos = selectedUnitPos;
     }
 
+    public async init(_: IGameStateData) {
+        // Adding some interesting overlay to show which unit is moving would be nice here
+    }
+
     public state() {
         return GameState.UnitSelected;
     }
@@ -57,9 +61,6 @@ export class GameStateUnitSelected implements IGameState {
 
         // Whether we suceeded or not, just go back to Idle... either we moved successfully,
         // or the user clicked somewhere else and canceled it.  Either is fine.
-
-        // TODO: Make this cleaner, don't like how this is magical right now
-        data.visuals.movementOverlay.clear();
         return new GameStateIdle();
     }
 }

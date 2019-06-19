@@ -3,6 +3,10 @@ import { GameState, IGameState, IGameStateData } from './index';
 import { GameStateUnitSelected } from './unitSelected';
 
 export class GameStateIdle implements IGameState {
+    public async init(data: IGameStateData): Promise<void> {
+        data.visuals.movementOverlay.clear();
+    }
+
     public state() {
         return GameState.Idle;
     }

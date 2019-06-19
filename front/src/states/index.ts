@@ -12,12 +12,12 @@ export enum GameState {
 export interface IGameStateData {
     awfService: awfdata.WasmService;
     visuals: IGameVisuals;
-
-    // Should figure out something better for this...
-    selectedUnitPos: awfdata.IPoint | undefined;
 }
 
 export interface IGameState {
+    // Called by GameStateMachine after it discovers it's been given a new state
+    init(data: IGameStateData): Promise<void>;
+
     mouseMovedTo(data: IGameStateData, pos: awfdata.IPoint): Promise<IGameState | null>;
     clicked(data: IGameStateData, pos: awfdata.IPoint): Promise<IGameState | null>;
 
@@ -27,19 +27,20 @@ export interface IGameState {
 export class GameStateMachine {
     private state: IGameState = new GameStateIdle();
 
-    public async mouseMovedTo(data: IGameStateData, pos: awfdata.IPoint): Promise<void> {
-        const newState = await this.state.mouseMovedTo(data, pos);
-
-        if (newState) {
-            this.state = newState;
+    private changeState(state: IGameState | null, data: IGameStateData) {
+        if (!state) {
+            return;
         }
+
+        this.state = state;
+        this.state.init(data);
+    }
+
+    public async mouseMovedTo(data: IGameStateData, pos: awfdata.IPoint): Promise<void> {
+        this.changeState(await this.state.mouseMovedTo(data, pos), data);
     }
 
     public async clicked(data: IGameStateData, pos: awfdata.IPoint): Promise<void> {
-        const newState = await this.state.clicked(data, pos);
-
-        if (newState) {
-            this.state = newState;
-        }
+        this.changeState(await this.state.clicked(data, pos), data);
     }
 }
