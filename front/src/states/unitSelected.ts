@@ -59,7 +59,7 @@ export class GameStateUnitSelected implements IGameState {
             // This is fine, just don't do anything else
         }
 
-        // Whether we suceeded or not, just go back to Idle... either we moved successfully,
+        // Whether we succeeded or not, just go back to Idle... either we moved successfully,
         // or the user clicked somewhere else and canceled it.  Either is fine.
         return new GameStateIdle();
     }
