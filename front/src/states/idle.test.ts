@@ -9,6 +9,8 @@ import { GameStateIdle } from './idle';
 const expect = chai.expect;
 chai.use(sinonChai);
 
+const FuncGetPotentialMoves = 'GetPotentialMoves';
+
 describe('GameStateIdle', () => {
     let fakeGame: MockedGameData;
 
@@ -34,16 +36,16 @@ describe('GameStateIdle', () => {
         expect(fakeGame.visuals.movementOverlay.clear).to.have.been.called;
     });
 
-    it('shows potential moves on the movement overlay', async () => {
+    it('shows potential moves on the movement overlay when any potential moves are found', async () => {
         const state = new GameStateIdle();
 
         state.init(fakeGame.getGameStateData());
 
-        const getMoves = fakeGame.awfStubs.getStub('GetPotentialMoves');
+        const getMoves = fakeGame.awfStubs.getStub(FuncGetPotentialMoves);
         const response: awfdata.IGetPotentialMovesResponse = {
             moves: [
                 { x: 1, y: 2 },
-                { x: 3, y: 2 },
+                { x: 2, y: 2 },
             ],
         };
         const encoded = awfdata.GetPotentialMovesResponse.encode(response).finish();
@@ -61,5 +63,36 @@ describe('GameStateIdle', () => {
         expect(getMoves).to.have.been.calledOnce;
         expect(response.moves!.length).to.be.greaterThan(0);
         expect(fakeGame.visuals.movementOverlay.enableSquare).to.have.callCount(response.moves!.length);
+    });
+
+    it('changes to the unit selected state when a square with potential moves is clicked on', async () => {
+        const state = new GameStateIdle();
+
+        state.init(fakeGame.getGameStateData());
+
+        const getMoves = fakeGame.awfStubs.getStub(FuncGetPotentialMoves);
+        const response: awfdata.IGetPotentialMovesResponse = {
+            moves: [
+                { x: 1, y: 2 },
+                { x: 2, y: 2 },
+            ],
+        };
+        const encoded = awfdata.GetPotentialMovesResponse.encode(response).finish();
+
+        getMoves.callsArgWith(1, undefined, encoded);
+
+        const pos: awfdata.IPoint = {
+            x: 1,
+            y: 1,
+        };
+
+        const unit: awfdata.IUnit = {};
+
+        fakeGame.addUnit(pos, unit);
+
+        const nextState = await state.clicked(fakeGame.getGameStateData(), pos);
+
+        expect(nextState).to.exist;
+        expect(nextState!.state()).to.equal(GameState.UnitSelected);
     });
 });

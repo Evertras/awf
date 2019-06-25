@@ -15,12 +15,25 @@ export class FakeGameVisuals implements IGameVisuals {
             enableSquare: sinon.stub(),
         };
 
+        const width = 10;
+        const height = 8;
+
         this.map = {
-            width: 10,
-            height: 10,
+            width: width,
+            height: height,
             data: {
+                tiles: [],
             },
         };
+
+        for (let x = 0; x < width; x++) {
+            for (let y = 0; y < height; y++) {
+                this.map.data.tiles!.push({
+                    terrainId: 1,
+                    unit: null,
+                });
+            }
+        }
 
         this.units = {};
     }
