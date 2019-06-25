@@ -1,14 +1,21 @@
 import { animationUnit, UnitAnimation, UnitType } from '../assets';
 import { awfdata } from '../proto/messages';
 
-export class Unit extends PIXI.Container {
-    public unit: awfdata.IUnit;
+export interface IVisualUnit {
+    data: awfdata.IUnit;
+
+    x: number;
+    y: number;
+}
+
+export class VisualUnit extends PIXI.Container implements IVisualUnit {
+    public data: awfdata.IUnit;
     private sprite: PIXI.extras.AnimatedSprite;
 
-    constructor(unit: awfdata.IUnit) {
+    constructor(data: awfdata.IUnit) {
         super();
 
-        this.unit = unit;
+        this.data = data;
         this.sprite = new PIXI.extras.AnimatedSprite(animationUnit(UnitType.SkeletonWarrior, UnitAnimation.Idle), true);
 
         this.sprite.anchor.set(0.5, 0.6);
@@ -16,7 +23,7 @@ export class Unit extends PIXI.Container {
         this.sprite.animationSpeed = 0.2;
         this.sprite.play();
 
-        if (unit.owner && unit.owner % 2 === 1) {
+        if (data.owner && data.owner % 2 === 1) {
             this.sprite.scale.x = -this.sprite.scale.x;
         }
 

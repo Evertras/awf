@@ -20,6 +20,7 @@
     "ts-node": "^8.0.2",
     "tslint": "^5.12.1",
     "tslint-loader": "^3.5.4",
+    "tslint-no-unused-expression-chai": "^0.1.4",
     "typescript": "^3.2.4",
     "typestate": "^1.0.6",
     "webpack": "^4.29.0",

@@ -1,9 +1,9 @@
-import { Map } from './map';
-import { MovementOverlay } from './movementOverlay';
-import { Unit } from './unit';
+import { IVisualMap } from './map';
+import { IVisualMovementOverlay } from './movementOverlay';
+import { IVisualUnit } from './unit';
 
 export interface IGameVisuals {
-    movementOverlay: MovementOverlay;
-    map: Map;
-    units: { [id: number]: Unit };
+    movementOverlay: IVisualMovementOverlay;
+    map: IVisualMap;
+    units: { [id: number]: IVisualUnit };
 }

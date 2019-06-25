@@ -1,7 +1,13 @@
 import { textureTerrainGrass, textureTerrainObjectiveNeutral, tileSize } from '../assets';
 import { awfdata } from '../proto/messages';
 
-export class Map {
+export interface IVisualMap {
+    height: number;
+    width: number;
+    data: awfdata.IMap;
+}
+
+export class VisualMap implements IVisualMap {
     public data: awfdata.IMap;
     public layer: PIXI.Container = new PIXI.Container();
 

@@ -2,9 +2,9 @@ import { tileSize } from './assets';
 import { awfdata } from './proto/messages';
 import { GameStateMachine, IGameStateData } from './states';
 import { IGameVisuals } from './visuals/game';
-import { Map } from './visuals/map';
-import { MovementOverlay } from './visuals/movementOverlay';
-import { Unit } from './visuals/unit';
+import { VisualMap } from './visuals/map';
+import { VisualMovementOverlay } from './visuals/movementOverlay';
+import { VisualUnit } from './visuals/unit';
 
 export class Game extends PIXI.Container {
     private readonly visuals: IGameVisuals;
@@ -26,8 +26,8 @@ export class Game extends PIXI.Container {
         }
 
         this.visuals = {
-            movementOverlay: new MovementOverlay(g.map.width, g.map.height),
-            map: new Map(g.map),
+            movementOverlay: new VisualMovementOverlay(g.map.width, g.map.height),
+            map: new VisualMap(g.map),
             units: {},
         } as IGameVisuals;
 
@@ -39,7 +39,7 @@ export class Game extends PIXI.Container {
                 const tile = g.map.tiles[y * g.map.width + x];
 
                 if (tile.unit) {
-                    const u = new Unit(tile.unit);
+                    const u = new VisualUnit(tile.unit);
 
                     this.visuals.units[u.unit.id!] = u;
 

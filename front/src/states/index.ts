@@ -16,8 +16,9 @@ export interface IGameStateData {
 
 export interface IGameState {
     // Called by GameStateMachine after it discovers it's been given a new state
-    init(data: IGameStateData): Promise<void>;
+    init(data: IGameStateData): void;
 
+    // Various inputs that states can react to
     mouseMovedTo(data: IGameStateData, pos: awfdata.IPoint): Promise<IGameState | null>;
     clicked(data: IGameStateData, pos: awfdata.IPoint): Promise<IGameState | null>;
 

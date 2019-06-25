@@ -1,6 +1,11 @@
 import { textureSquareMove, tileSize } from '../assets';
 
-export class MovementOverlay extends PIXI.Container {
+export interface IVisualMovementOverlay {
+    clear(): void;
+    enableSquare(x: number, y: number): void;
+}
+
+export class VisualMovementOverlay extends PIXI.Container implements IVisualMovementOverlay {
     private overlays: Array<PIXI.Sprite | null>;
     private mapWidth: number;
     private mapHeight: number;
