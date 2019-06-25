@@ -4,10 +4,11 @@ export class WasmStub {
     private readonly wasmStubs: { [id: string]: sinon.SinonStub } = {};
 
     public getStub(methodName: string): sinon.SinonStub {
-        const existing = this.wasmStubs[methodName];
+        let existing = this.wasmStubs[methodName];
 
         if (!existing) {
-            this.wasmStubs[methodName] = sinon.stub();
+            existing = sinon.stub();
+            this.wasmStubs[methodName] = existing;
         }
 
         return existing;
@@ -15,7 +16,7 @@ export class WasmStub {
 
     public getImpl(): (method: any, requestData: any, callback: any) => void {
         return (method: any, requestData: any, callback: any) => {
-            const stub = this.getStub(method.Name);
+            const stub = this.getStub(method.name);
 
             stub(requestData, callback);
         };

@@ -23,6 +23,8 @@ export class GameStateIdle implements IGameState {
             }
         } catch (e) {
             // TODO: Validate up front better and treat this as a legit error?
+            console.log(e);
+            throw e;
         }
 
         return null;
