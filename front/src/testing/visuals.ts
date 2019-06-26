@@ -13,17 +13,19 @@ export class FakeGameVisuals implements IGameVisuals {
         this.movementOverlay = {
             clear: sinon.stub(),
             enableSquare: sinon.stub(),
+            layer: {} as any,
         };
 
         const width = 10;
         const height = 8;
 
         this.map = {
-            width: width,
-            height: height,
+            width,
+            height,
             data: {
                 tiles: [],
             },
+            layer: {} as any,
         };
 
         for (let x = 0; x < width; x++) {

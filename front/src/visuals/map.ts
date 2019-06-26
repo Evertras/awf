@@ -5,6 +5,7 @@ export interface IVisualMap {
     height: number;
     width: number;
     data: awfdata.IMap;
+    layer: PIXI.Container;
 }
 
 export class VisualMap implements IVisualMap {

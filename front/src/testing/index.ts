@@ -22,6 +22,6 @@ export class MockedGameData {
     }
 
     public addUnit(pos: awfdata.IPoint, unit: awfdata.IUnit) {
-        this.visuals.map.data.tiles![(pos.y!-1) * this.visuals.map.width + (pos.x!-1)].unit = unit;
+        this.visuals.map.data.tiles![(pos.y! - 1) * this.visuals.map.width + (pos.x! - 1)].unit = unit;
     }
 }

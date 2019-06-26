@@ -1,18 +1,19 @@
 import { textureSquareMove, tileSize } from '../assets';
 
 export interface IVisualMovementOverlay {
+    layer: PIXI.Container;
     clear(): void;
     enableSquare(x: number, y: number): void;
 }
 
-export class VisualMovementOverlay extends PIXI.Container implements IVisualMovementOverlay {
+export class VisualMovementOverlay implements IVisualMovementOverlay {
+
+    public readonly layer: PIXI.Container = new PIXI.Container();
     private overlays: Array<PIXI.Sprite | null>;
     private mapWidth: number;
     private mapHeight: number;
 
     constructor(width: number, height: number) {
-        super();
-
         this.mapWidth = width;
         this.mapHeight = height;
 
@@ -20,7 +21,7 @@ export class VisualMovementOverlay extends PIXI.Container implements IVisualMove
     }
 
     public clear() {
-        this.removeChildren();
+        this.layer.removeChildren();
 
         for (let i = 0; i < this.overlays.length; ++i) {
             const s = this.overlays[i];
@@ -45,7 +46,7 @@ export class VisualMovementOverlay extends PIXI.Container implements IVisualMove
             s.anchor.x = 0.5;
             s.anchor.y = 0.5;
 
-            this.addChild(s);
+            this.layer.addChild(s);
 
             this.overlays[i] = s;
         }

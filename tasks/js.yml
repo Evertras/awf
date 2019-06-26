@@ -41,7 +41,7 @@ tasks:
       - npx webpack
 
   test:
-    deps: [ proto ]
+    deps: [ build ]
     cmds:
       - npx tslint -p . --fix
       - npm test

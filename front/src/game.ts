@@ -32,7 +32,7 @@ export class Game extends PIXI.Container {
         } as IGameVisuals;
 
         this.addChild(this.visuals.map.layer);
-        this.addChild(this.visuals.movementOverlay);
+        this.addChild(this.visuals.movementOverlay.layer);
 
         for (let x = 0; x < g.map.width; ++x) {
             for (let y = 0; y < g.map.height; ++y) {
@@ -41,7 +41,7 @@ export class Game extends PIXI.Container {
                 if (tile.unit) {
                     const u = new VisualUnit(tile.unit);
 
-                    this.visuals.units[u.unit.id!] = u;
+                    this.visuals.units[u.data.id!] = u;
 
                     u.x = tileSize * x;
                     u.y = tileSize * y;
