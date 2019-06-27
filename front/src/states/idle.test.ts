@@ -95,4 +95,26 @@ describe('GameStateIdle', () => {
         expect(nextState).to.exist;
         expect(nextState!.state()).to.equal(GameState.UnitSelected);
     });
+
+    it('stays in the same state when an square with no potential moves is clicked on', async () => {
+        const state = new GameStateIdle();
+
+        state.init(fakeGame.getGameStateData());
+
+        const getMoves = fakeGame.awfStubs.getStub(FuncGetPotentialMoves);
+        getMoves.callsArgWith(1, new Error('nope'));
+
+        const pos: awfdata.IPoint = {
+            x: 1,
+            y: 1,
+        };
+
+        const unit: awfdata.IUnit = {};
+
+        fakeGame.addUnit(pos, unit);
+
+        const nextState = await state.clicked(fakeGame.getGameStateData(), pos);
+
+        expect(nextState).to.not.exist;
+    });
 });
