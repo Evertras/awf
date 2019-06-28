@@ -2,6 +2,7 @@ import { loadAssets } from './assets';
 import { Game } from './game';
 import { awfdata } from './proto/messages';
 import { wasmImpl } from './rpc/impl';
+import { UI } from './ui';
 import { loadWASM } from './wasmloader';
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
@@ -36,8 +37,13 @@ async function ready() {
 
         const state = await wasmSvc.getGameState(awfdata.GetGameStateRequest.create({}));
         const gameVisual = new Game(state.state!, wasmSvc);
+        const ui = new UI();
+
+        gameVisual.x = 100;
+        gameVisual.y = 100;
 
         app.stage.addChild(gameVisual);
+        app.stage.addChild(ui);
     }
 }
 

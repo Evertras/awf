@@ -67,5 +67,7 @@ func (s *Server) Listen(addr string) error {
 		Handler: mux,
 	}
 
+	log.Printf("Listening on %s", addr)
+
 	return httpServer.ListenAndServe()
 }

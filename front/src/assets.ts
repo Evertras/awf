@@ -5,6 +5,7 @@ const pathTilemapUnits = 'assets/units.json';
 const pathTerrainGrass = 'grass1.png';
 const pathTerrainObjectiveNeutral = 'objective-neutral.png';
 const pathUISquareMove = 'square_move.png';
+const pathUIButton = 'button.png';
 
 let texturesTerrain: PIXI.loaders.TextureDictionary | undefined;
 let texturesUI: PIXI.loaders.TextureDictionary | undefined;
@@ -68,4 +69,8 @@ export function textureTerrainObjectiveNeutral(): PIXI.Texture {
 
 export function textureSquareMove(): PIXI.Texture {
     return getTexUI(pathUISquareMove);
+}
+
+export function textureUIButton(): PIXI.Texture {
+    return getTexUI(pathUIButton);
 }

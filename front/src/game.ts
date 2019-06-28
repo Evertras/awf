@@ -17,8 +17,6 @@ export class Game extends PIXI.Container {
     constructor(g: awfdata.IGame, awf: awfdata.WasmService) {
         super();
 
-        // this.gameData = g;
-
         this.awf = awf;
 
         if (!g.map || !g.map.width || !g.map.height || !g.map.tiles) {
@@ -51,8 +49,6 @@ export class Game extends PIXI.Container {
             }
         }
 
-        this.x = 100;
-        this.y = 100;
         this.hitArea = new PIXI.Rectangle(0, 0, this.visuals.map.width * tileSize, this.visuals.map.height * tileSize);
         this.interactive = true;
 

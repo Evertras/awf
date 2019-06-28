@@ -1,8 +1,16 @@
 {"frames": {
 
+"button.png":
+{
+	"frame": {"x":0,"y":0,"w":100,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":50},
+	"sourceSize": {"w":100,"h":50}
+},
 "square_move.png":
 {
-	"frame": {"x":0,"y":0,"w":40,"h":40},
+	"frame": {"x":102,"y":0,"w":40,"h":40},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":40,"h":40},
@@ -13,8 +21,8 @@
 	"version": "1.0",
 	"image": "ui.png",
 	"format": "RGBA8888",
-	"size": {"w":40,"h":40},
+	"size": {"w":142,"h":50},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:6dc1cdb921675b3b9b351736428fc934:c4c6865f2a570678fb8d3234896852eb:5b04aa198265472a3c5f56958d78e97b$"
+	"smartupdate": "$TexturePacker:SmartUpdate:094ddf58a2fe92121b5daaa81a842223:968a6938a97714660bdf609a2d0e6588:5b04aa198265472a3c5f56958d78e97b$"
 }
 }
