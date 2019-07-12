@@ -14,9 +14,11 @@ message Game {
 
     repeated Player players = 2;
 
-    // Zero indexed, corresponds to the location in the players list above
+    // Starts at 1.  Corresponds to the location in the players list above in order.
+    // Note that the players list is 0 indexed, so this value needs to be offset.
+    // to access the correct player.
     uint32 active_player = 3;
 
-    // A turn is over after all players have gone
+    // Starts at 1.  A turn is over after all players have gone.
     uint32 turn = 4;
 }
